@@ -34,4 +34,14 @@ public class Solution {
         head.next = lastNode;
         return headNode;
     }
+/**
+ * Insert a node at the head of a linked list
+ * #HackerRank
+ */
+    Node Insert(Node head,int x) {
+        Node headNode = new Node();
+        headNode.next = head;
+        headNode.data = x;
+        return headNode;
+    }
 }
