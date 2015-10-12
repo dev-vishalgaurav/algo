@@ -44,4 +44,28 @@ public class Solution {
         headNode.data = x;
         return headNode;
     }
+/**
+ * Insert a node at a specific position in a linked list
+ * #HackerRank
+ */
+    Node InsertNth(Node head, int data, int position) {
+        Node insertNode = new Node();
+        insertNode.data = data; 
+        insertNode.next = null;
+        Node headNode = head;
+        int count = 0 ;
+        Node prevNode = null ;
+        while(count != position){
+            count++;
+            prevNode = head ;
+            head = head.next;
+        }
+        insertNode.next = head;
+        if(prevNode!=null){
+            prevNode.next = insertNode;
+        }else{
+            headNode = insertNode ;
+        }
+        return headNode;
+    }
 }
