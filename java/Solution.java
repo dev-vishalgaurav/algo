@@ -68,4 +68,24 @@ public class Solution {
         }
         return headNode;
     }
+/**
+ * Delete a Node
+ * #HackerRank
+ */
+    Node Delete(Node head, int position) {
+        Node headNode = head; 
+        Node prevNode = null;
+        int count = 0 ; 
+        while(count != position){
+            prevNode = head;
+            head = head.next;
+            count++;
+        }
+        if(prevNode!=null){  
+          prevNode.next = head.next;
+        }else{
+            headNode = headNode.next;
+        }
+        return headNode;
+      }
 }
