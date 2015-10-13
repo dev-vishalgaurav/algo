@@ -102,7 +102,23 @@ public class Solution {
           
 
       }
-
+/**
+ * Reverse a linked list
+ * #HackerRank
+ */
+    Node Reverse(Node head) {
+        Node prevNode = null ;
+        Node currentNode = null;
+        Node nextNode = null;
+        while(head!=null){
+            prevNode = currentNode;
+            currentNode = head ;
+            head = head.next;
+            currentNode.next = prevNode ; 
+        }
+        
+        return currentNode ;
+    }
 /**
  * delete duplicate value nodes from a sorted linked list
  * #HackerRank
