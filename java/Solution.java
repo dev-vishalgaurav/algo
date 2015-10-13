@@ -109,4 +109,26 @@ public class Solution {
         }
         return headNode;
     }
+/**
+* detect whether a linked list contains a cycle
+* #HackerRank
+*/
+    int HasCycle(Node head) {
+        int result = 0 ;
+        Node hare =  null;
+        if(head!=null){
+            hare = head;
+            while(head!=null && hare!=null && hare.next!=null){
+                head = head.next;
+                hare = hare.next.next;
+                if(head == hare){
+                    result =  1;
+                    break;
+                }
+            }
+                
+        }
+        return result ;
+    }
+
 }
