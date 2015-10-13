@@ -88,4 +88,25 @@ public class Solution {
         }
         return headNode;
       }
+/**
+ * delete duplicate value nodes from a sorted linked list
+ * #HackerRank
+ * 
+ */
+    Node RemoveDuplicates(Node head) {
+        Node headNode = null ;
+        if(head!=null){
+            headNode = head;
+            while(head!=null){
+                if(head.next!=null && (head.data == head.next.data)){
+                    Node nextNode = head.next ;
+                    head.next = nextNode.next;
+                    nextNode.next = null;
+                }else{
+                    head = head.next;
+                }
+            }
+        }
+        return headNode;
+    }
 }
