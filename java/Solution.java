@@ -89,6 +89,21 @@ public class Solution {
         return headNode;
       }
 /**
+ * Print in reverse
+ * #HackerRank
+ */
+    void ReversePrint(Node head) {
+        // This is a "method-only" submission. 
+        // You only need to complete this method.
+          if(head != null){
+              ReversePrint(head.next);
+              System.out.println(head.data);
+          }
+          
+
+      }
+
+/**
  * delete duplicate value nodes from a sorted linked list
  * #HackerRank
  * 
