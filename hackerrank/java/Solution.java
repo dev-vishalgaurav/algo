@@ -161,5 +161,25 @@ public class Solution {
         }
         return result ;
     }
+    int FindMergeNode(Node headA, Node headB) {
+        int result = 0 ;
+        Node headNodeA = headA;
+        while(headA.next!=null){
+            headA = headA.next;
+        }
+        headA.next = headB;
+        // now there is only one list with a cycle starting with headNodeA
+        headA = headNodeA;
+        
+        while(headA!=null && headNodeA!=null && headNodeA.next !=null){
+            headA = headA.next;
+            headNodeA = headNodeA.next.next;
+            if(headA == headNodeA){
+               return headNodeA.data;
+            }
+        }
+        return result;
+
+    }
 
 }
