@@ -8,11 +8,17 @@ package algos;
 public class Sorting<T extends Comparable<T>> {
 
     public static void main(String[] args) {
+        boolean isSorted = false;
         Integer[] arrayToBeSorted = getTestArray();
         new Sorting<Integer>().SelectionSort(arrayToBeSorted, arrayToBeSorted.length);
-        System.out.println(arrayToBeSorted);
-        boolean isSorted = isArraySorted(arrayToBeSorted);
-        System.out.println("sorting success = " + isSorted);
+        isSorted = isArraySorted(arrayToBeSorted);
+        System.out.println("Selection sorting success = " + isSorted);
+        isSorted = false;
+        arrayToBeSorted = getTestArray();
+        new Sorting<Integer>().BubbleSort(arrayToBeSorted, arrayToBeSorted.length);
+        isSorted = isArraySorted(arrayToBeSorted);
+        System.out.println("Bubble sorting success = " + isSorted);
+         
     }
     
     /**
@@ -48,16 +54,14 @@ public class Sorting<T extends Comparable<T>> {
      */
     public void SelectionSort(T[] arrayToBeSorted, int length ){
         int minIndex ;
-         for (int count = 0; count < arrayToBeSorted.length; count++) {
+         for (int count = 0; count < arrayToBeSorted.length - 1; count++) {
                minIndex = count ;
             for (int countInner = count; countInner < arrayToBeSorted.length; countInner++) {
                 if(arrayToBeSorted[countInner].compareTo(arrayToBeSorted[minIndex]) <= 0 ){
                     minIndex = countInner ;
                 }
             }
-            T tempValue = arrayToBeSorted[count];
-            arrayToBeSorted[count] = arrayToBeSorted[minIndex];
-            arrayToBeSorted[minIndex] = tempValue;
+            swapArrayItems(arrayToBeSorted, count, minIndex);
         }
     }
     /**
@@ -66,7 +70,30 @@ public class Sorting<T extends Comparable<T>> {
      * @param length
      */
     public void BubbleSort(T[] arrayToBeSorted, int length ){
-        
+        boolean isSortingNeeded = false ;
+        for (int count = 0; count < arrayToBeSorted.length; count++) {
+           isSortingNeeded = false ;
+           for (int countInner = 0; countInner < arrayToBeSorted.length - 1 - count; countInner++) {
+               if(arrayToBeSorted[countInner].compareTo(arrayToBeSorted[countInner + 1]) > 0 ){
+                  swapArrayItems(arrayToBeSorted, countInner, countInner + 1);
+                   isSortingNeeded = true ;
+               }
+           }
+           if(!isSortingNeeded){
+               break ; 
+           }
+       }
+    }
+    /**
+     * helper method to swap array items.
+     * @param array in which elements will be swapped.
+     * @param swapFrom swapIndex 1
+     * @param swapTo swapIndex 2
+     */
+    private void swapArrayItems(T[] array, int swapFrom , int swapTo){
+        T tempValue = array[swapFrom];
+        array[swapFrom] = array[swapTo];
+        array[swapTo] = tempValue;
     }
     /**
      * this method will sort an array by InsertionSort algorithm
