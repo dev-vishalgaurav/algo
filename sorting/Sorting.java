@@ -18,6 +18,11 @@ public class Sorting<T extends Comparable<T>> {
         new Sorting<Integer>().BubbleSort(arrayToBeSorted, arrayToBeSorted.length);
         isSorted = isArraySorted(arrayToBeSorted);
         System.out.println("Bubble sorting success = " + isSorted);
+        isSorted = false;
+        arrayToBeSorted = getTestArray();
+        new Sorting<Integer>().InsertionSort(arrayToBeSorted, arrayToBeSorted.length);
+        isSorted = isArraySorted(arrayToBeSorted);
+        System.out.println("Insertion sorting success = " + isSorted);
          
     }
     
@@ -101,7 +106,12 @@ public class Sorting<T extends Comparable<T>> {
      * @param length
      */
     public void InsertionSort(T[] arrayToBeSorted, int length ){
-        
+        for (int count = 1; count < arrayToBeSorted.length; count++) {
+            while(count - 1 >= 0 && arrayToBeSorted[count].compareTo(arrayToBeSorted[count -1]) < 0){
+                swapArrayItems(arrayToBeSorted, count, count - 1);
+                count-- ;
+            }
+        }
     }
 
 }
