@@ -5,24 +5,31 @@ package algos;
  * This file contains implementation for few sorting algorithms
  * sorting using generic objects 
  */
-public class Sorting<T extends Comparable<T>> {
+public class Sorting {
 
     public static void main(String[] args) {
+        Sorting sorting = new Sorting();
         boolean isSorted = false;
         Integer[] arrayToBeSorted = getTestArray();
-        new Sorting<Integer>().SelectionSort(arrayToBeSorted, arrayToBeSorted.length);
+        sorting.SelectionSort(arrayToBeSorted, arrayToBeSorted.length);
         isSorted = isArraySorted(arrayToBeSorted);
         System.out.println("Selection sorting success = " + isSorted);
         isSorted = false;
         arrayToBeSorted = getTestArray();
-        new Sorting<Integer>().BubbleSort(arrayToBeSorted, arrayToBeSorted.length);
+        sorting.BubbleSort(arrayToBeSorted, arrayToBeSorted.length);
         isSorted = isArraySorted(arrayToBeSorted);
         System.out.println("Bubble sorting success = " + isSorted);
         isSorted = false;
         arrayToBeSorted = getTestArray();
-        new Sorting<Integer>().InsertionSort(arrayToBeSorted, arrayToBeSorted.length);
+        sorting.InsertionSort(arrayToBeSorted, arrayToBeSorted.length);
         isSorted = isArraySorted(arrayToBeSorted);
         System.out.println("Insertion sorting success = " + isSorted);
+//        testMergeSortedArray();
+        isSorted = false;
+        arrayToBeSorted = getTestArray();
+        sorting.MergeSort(arrayToBeSorted, arrayToBeSorted.length);
+        isSorted = isArraySorted(arrayToBeSorted);
+        System.out.println("Merge sorting success = " + isSorted);
          
     }
     
@@ -57,7 +64,7 @@ public class Sorting<T extends Comparable<T>> {
      * @param arrayToBeSorted
      * @param length
      */
-    public void SelectionSort(T[] arrayToBeSorted, int length ){
+    public void SelectionSort(Comparable[] arrayToBeSorted, int length ){
         int minIndex ;
          for (int count = 0; count < arrayToBeSorted.length - 1; count++) {
                minIndex = count ;
@@ -74,7 +81,7 @@ public class Sorting<T extends Comparable<T>> {
      * @param arrayToBeSorted
      * @param length
      */
-    public void BubbleSort(T[] arrayToBeSorted, int length ){
+    public void BubbleSort(Comparable[] arrayToBeSorted, int length ){
         boolean isSortingNeeded = false ;
         for (int count = 0; count < arrayToBeSorted.length; count++) {
            isSortingNeeded = false ;
@@ -95,8 +102,8 @@ public class Sorting<T extends Comparable<T>> {
      * @param swapFrom swapIndex 1
      * @param swapTo swapIndex 2
      */
-    private void swapArrayItems(T[] array, int swapFrom , int swapTo){
-        T tempValue = array[swapFrom];
+    private void swapArrayItems(Comparable[] array, int swapFrom , int swapTo){
+        Comparable tempValue = array[swapFrom];
         array[swapFrom] = array[swapTo];
         array[swapTo] = tempValue;
     }
@@ -105,13 +112,112 @@ public class Sorting<T extends Comparable<T>> {
      * @param arrayToBeSorted
      * @param length
      */
-    public void InsertionSort(T[] arrayToBeSorted, int length ){
+    public void InsertionSort(Comparable[] arrayToBeSorted, int length ){
         for (int count = 1; count < arrayToBeSorted.length; count++) {
-            while(count - 1 >= 0 && arrayToBeSorted[count].compareTo(arrayToBeSorted[count -1]) < 0){
-                swapArrayItems(arrayToBeSorted, count, count - 1);
-                count-- ;
+            int currentCount = count ; 
+            while(currentCount - 1 >= 0 && arrayToBeSorted[currentCount].compareTo(arrayToBeSorted[currentCount -1]) < 0){
+                swapArrayItems(arrayToBeSorted, currentCount, currentCount - 1);
+                currentCount-- ;
             }
         }
     }
 
+    /**
+     * not an inplace sorting algorithm. 
+     * stable algorithm (relative order remains the same)
+     * O(n) space complexity
+     * @param arrayToBeSorted
+     * @param length
+     */
+    public void MergeSort(Comparable[] arrayToBeSorted, int length ){
+        if(arrayToBeSorted.length > 1){
+            int minIndex = getMinIndex(arrayToBeSorted.length - 1);
+            Comparable[] leftHalf = (Comparable[]) getNewSubArray(arrayToBeSorted, 0, minIndex);
+            Comparable[] rightHalf = (Comparable[]) getNewSubArray(arrayToBeSorted, minIndex + 1, arrayToBeSorted.length - 1);
+            System.out.println("First half - " + arrayToBeSorted.length);
+            MergeSort(leftHalf, leftHalf.length);
+            System.out.println("Second half - " + arrayToBeSorted.length);
+            MergeSort(rightHalf, rightHalf.length);
+            mergeSortedArray(leftHalf, rightHalf, arrayToBeSorted);
+        }
+    }
+    /**
+     * returns a new sub array and assumes indexes as inclusive
+     * @param originalArray
+     * @param indexStart
+     * @param indexLast
+     * @return
+     */
+    private Comparable[] getNewSubArray(Comparable[] originalArray, int indexStart, int indexLast){
+        Comparable[] resultArray = new Comparable[indexLast - indexStart + 1];
+        int resultIndex = 0 ;
+        for(int count = indexStart ; count <= indexLast ; count ++){
+            resultArray[resultIndex] = originalArray[count];
+            resultIndex++;
+        }
+        return resultArray;
+    }
+    private int getMinIndex(int arrayLength){
+        return ((arrayLength % 2 == 0) ? arrayLength / 2 : (arrayLength + 1) / 2) - 1;
+    }
+    /**
+     * method to merge 2 arrays 
+     * @param arrayFirst
+     * @param arraySecond
+     * @param arrayResult
+     */
+    @SuppressWarnings("unchecked")
+    private boolean mergeSortedArray(Comparable[] arrayFirst, Comparable[] arraySecond,Comparable[] arrayResult){
+        boolean result = false;
+        if((arrayFirst!=null && arraySecond != null && arrayResult != null ) 
+            && (arrayResult.length == (arrayFirst.length + arraySecond.length))){ 
+            result = true;
+            int countFirst = 0 , countSecond = 0 , countResult = 0 ;
+            // run loop to the maximum of both the arrays
+            while(countFirst < arrayFirst.length || countSecond < arraySecond.length){
+                // first condition when the bounds of each array is not completed
+                if(countFirst < arrayFirst.length && countSecond < arraySecond.length){
+                    if( arrayFirst[countFirst].compareTo(arraySecond[countSecond]) < 0){
+                        arrayResult[countResult] = arrayFirst[countFirst];
+                        countFirst++;
+                    }else{
+                        arrayResult[countResult] = arraySecond[countSecond];
+                        countSecond++;
+                    }
+                }else if (countFirst <= arrayFirst.length - 1){
+                    arrayResult[countResult] = arrayFirst[countFirst];
+                    countFirst++ ;
+                }else {
+                    arrayResult[countResult] = arraySecond[countSecond];
+                    countSecond++ ;
+                }
+                countResult++ ; 
+            }   
+        }
+        return result;
+    }
+    private static void testMergeSortedArray() {
+        Sorting sorting = new Sorting();
+        Integer[] arrayFirst = new Integer[3];
+        arrayFirst[0] = 1 ;
+        arrayFirst[1] = 5 ;
+        arrayFirst[2] = 9 ;
+
+        Integer[] arraySecond = new Integer[10];
+        arraySecond[0] = 2 ;
+        arraySecond[1] = 3 ;
+        arraySecond[2] = 4;
+        arraySecond[3] = 6;
+        arraySecond[4] = 7;
+        arraySecond[5] = 10;
+        arraySecond[6] = 11;
+        arraySecond[7] = 12;
+        arraySecond[8] = 15;
+        arraySecond[9] = 16;
+        
+        
+        Integer[] arrayResult = new Integer[arrayFirst.length + arraySecond.length];
+        sorting.mergeSortedArray(arrayFirst, arraySecond, arrayResult);
+        
+    }
 }
