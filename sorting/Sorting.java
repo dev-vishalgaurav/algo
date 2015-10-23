@@ -30,6 +30,12 @@ public class Sorting {
         sorting.MergeSort(arrayToBeSorted, arrayToBeSorted.length);
         isSorted = isArraySorted(arrayToBeSorted);
         System.out.println("Merge sorting success = " + isSorted);
+        
+        isSorted = false;
+        arrayToBeSorted = getTestArray();
+        sorting.QuickSort(arrayToBeSorted, arrayToBeSorted.length);
+        isSorted = isArraySorted(arrayToBeSorted);
+        System.out.println("Quick sorting success = " + isSorted);
          
     }
     
@@ -121,7 +127,50 @@ public class Sorting {
             }
         }
     }
-
+    /**
+     * array will be sorted using quick sort algorithm
+     * @param arrarToBeSorted
+     * @param length
+     */
+    public void QuickSort(Comparable[] arrarToBeSorted, int length){
+        QuickSort(arrarToBeSorted,0,arrarToBeSorted.length-1);
+    }
+    /**
+     * private method to internally implement quicksort using start and end.
+     * @param arrayToBeSorted
+     * @param start
+     * @param end
+     */
+    private void QuickSort(Comparable[] arrayToBeSorted, int start, int end) {
+       if(start < end){
+           int partition = getpartition(arrayToBeSorted, start, end);
+           QuickSort(arrayToBeSorted, start,partition-1);
+           QuickSort(arrayToBeSorted, partition + 1,end);
+       }
+       
+       
+    }
+/**
+ * return the appropriate partitioning value
+ * @param arrayToBeSorted
+ * @param start
+ * @param end
+ * @return correct partition index
+ */
+    private int getpartition(Comparable[] arrayToBeSorted, int start, int end){
+        int partitionIndex = start;
+        for (int count = start; count < end; count++) {
+            if(arrayToBeSorted[count].compareTo(arrayToBeSorted[end])<=0){
+                swapArrayItems(arrayToBeSorted, partitionIndex, count);
+                partitionIndex++;
+            }
+        }
+        swapArrayItems(arrayToBeSorted, partitionIndex, end);
+        
+        return partitionIndex;
+    }
+    
+    
     /**
      * not an inplace sorting algorithm. 
      * stable algorithm (relative order remains the same)
