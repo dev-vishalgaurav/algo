@@ -128,7 +128,7 @@ public class Sorting {
         }
     }
     /**
-     * array will be sorted using quick sort algorithm
+     * array will be sorted using quick sort algorithm. it calls an overloaded version of its implementation.
      * @param arrarToBeSorted
      * @param length
      */
