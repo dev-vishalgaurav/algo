@@ -181,5 +181,40 @@ public class Solution {
         return result;
 
     }
-
+/**
+* Insert a node into a sorted doubly linked list 
+* #HackerRank
+*/
+	Node SortedInsert(Node head,int data) {
+		Node headNode = head ; 
+		Node newNode = new Node();
+		newNode.data = data;
+		newNode.prev = null;
+		newNode.next = null;
+		if(head!=null){
+			while( head != null){
+				if(head.data > data){
+					newNode.next = head;
+					// checking for insertion at front
+					if(head.prev!=null){
+						head.prev.next = newNode;
+					}else{
+						// headNode
+						headNode = newNode;
+					}
+					newNode.prev = head.prev;
+					head.prev = newNode;
+					break;
+				}else if(head.next == null){
+					head.next = newNode;
+					newNode.prev = head;
+					break;
+				}
+				head = head.next;
+			}
+		}else{
+			headNode = newNode;
+		}
+		return headNode;
+		}
 }
