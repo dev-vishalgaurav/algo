@@ -1,12 +1,11 @@
 
 public class Solution {
-  /*
-    Node is defined as 
+  /*Node is defined as */
     class Node {
        int data;
        Node next;
+	   Node prev;
     }
- */
  /**
  * Print the elements of a linked list
  * #HackerRank
@@ -216,5 +215,31 @@ public class Solution {
 			headNode = newNode;
 		}
 		return headNode;
-		}
+	}
+/**
+* Reverse a doubly linked list.  
+* #HackerRank
+*/
+    Node Reverse(Node head) {
+        Node headNode = head ; 
+        Node previousNode = null;
+        Node currentNode = null;
+        while(head != null){
+            currentNode = head;
+            head = head.next ; 
+            if(previousNode == null){
+                previousNode = currentNode;
+                currentNode.next = null;
+                currentNode.prev = null;
+            }else{
+                currentNode.next = previousNode;
+                currentNode.prev=null;
+                previousNode.prev = currentNode;
+                previousNode = previousNode.prev;
+                headNode = currentNode;
+            }
+
+        }
+        return headNode;
+    }
 }
