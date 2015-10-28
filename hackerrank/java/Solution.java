@@ -243,3 +243,107 @@ public class Solution {
         return headNode;
     }
 }
+
+   /**
+     * Arrays- DS HackerRank :- Data structures :- Arrays 
+	 * #HackerRank :- https://www.hackerrank.com/challenges/arrays-ds
+     */
+    public static void printArrayInReverse() {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        try {
+            int number = Integer.parseInt(reader.readLine());
+            String[] numArray = reader.readLine().split(" ");
+
+            while (number > 0) {
+                System.out.println(numArray[number - 1]);
+                number--;
+            }
+        } catch (NumberFormatException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 2D Array - DS HackerRank :- Data structures :- Arrays 
+	 * #HackerRank :- https://www.hackerrank.com/challenges/2d-array
+     */
+    static int getLargestHourGlass(int maxLength) {
+        int result = 0;
+        boolean isFirstDone = false;
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        try {
+
+            String[][] inputArrray = new String[maxLength][maxLength];
+            for (int count = 0; count < maxLength; count++) {
+                inputArrray[count] = reader.readLine().split(" ");
+            }
+            for (int rows = 1; rows < maxLength - 1; rows++) {
+                for (int columns = 1; columns < maxLength - 1; columns++) {
+                    int middleValue = Integer.parseInt(inputArrray[rows][columns]);
+                    int topCenter = Integer.parseInt(inputArrray[rows - 1][columns]);
+                    int topLeft = Integer.parseInt(inputArrray[rows - 1][columns - 1]);
+                    int topRight = Integer.parseInt(inputArrray[rows - 1][columns + 1]);
+                    int bottomLeft = Integer.parseInt(inputArrray[rows + 1][columns - 1]);
+                    int bottomRight = Integer.parseInt(inputArrray[rows + 1][columns + 1]);
+                    int bottomCenter = Integer.parseInt(inputArrray[rows + 1][columns]);
+
+                    int sum = middleValue + topLeft + topRight + topCenter + bottomLeft + bottomRight + bottomCenter;
+                    if (!isFirstDone) {
+                        isFirstDone = true;
+                        result = sum;
+                    } else {
+                        result = (sum > result) ? sum : result;
+                    }
+
+                }
+            }
+        } catch (NumberFormatException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+	
+	
+    /**
+     * HackerRank maximum sub array problem
+     * https://www.hackerrank.com/contests/codemania-1/challenges/maxsubarray/
+     * submissions/code/4087353
+     */
+    static void getMaxSubArraySum() {
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+            int turns = Integer.parseInt(reader.readLine());
+            for (int turnCounter = 0; turnCounter < turns; turnCounter++) {
+                int arrayLength = Integer.parseInt(reader.readLine());
+                String[] inputArrray = reader.readLine().split(" ");
+                long maxSofar = Integer.parseInt(inputArrray[0]);
+                long currentMax = maxSofar;
+                long maxNotContinuousSum = currentMax;
+                for (int count = 1; count < inputArrray.length; count++) {
+                    long currentNumber = Integer.parseInt(inputArrray[count]);
+                    currentMax = currentMax + currentNumber;
+                    currentMax = getMax(currentNumber, currentMax);
+                    maxSofar = getMax(maxSofar, currentMax);
+                    if (maxNotContinuousSum < 0) {
+                        maxNotContinuousSum = getMax(maxNotContinuousSum, currentNumber);
+                    } else {
+                        maxNotContinuousSum = getMax(maxNotContinuousSum, maxNotContinuousSum + currentNumber);
+                    }
+                }
+                System.out.println(maxSofar + " " + maxNotContinuousSum);
+            }
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
