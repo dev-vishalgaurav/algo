@@ -45,4 +45,57 @@ public class Solution {
         }
         return spiralList;
     }
+/**
+ * Count the number of prime numbers less than a non-negative number, n.
+ * https://leetcode.com/problems/count-primes/ efficient way of finding
+ * number of primes less than a number. Hint taken from LeetCode.com
+ * 
+ */
+    public int countPrimes(int n) {
+        boolean[] isPrime = new boolean[n];
+        for (int i = 2; i < n; i++) {
+            isPrime[i] = true;
+        }
+        for (int i = 2; i * i < n; i++) {
+            if (!isPrime[i])
+                continue;
+            for (int j = i * i; j < n; j += i) {
+                isPrime[j] = false;
+            }
+        }
+        int count = 0;
+        for (int i = 2; i < n; i++) {
+            if (isPrime[i])
+                count++;
+        }
+        return count;
+    }
+
+/**
+ * https://leetcode.com/problems/count-primes/ Naive method to find number
+ * of primes less than a number. O(n^1.5)
+ * 
+ */
+    public int countPrimesNaive(int number) {
+        int totalFactor = 0;
+        for (int count = 2; count <= number; count++) {
+            if (isPrime(count)) {
+                totalFactor++;
+            }
+        }
+        return totalFactor;
+    }
+
+/**
+ * helper method to find a number is prime. complexity O(n)
+ */
+    public boolean isPrime(int number) {
+        int sqrt = (int) Math.sqrt(number);
+        for (int i = 2; i <= sqrt; i++) {
+            if (number % i == 0) {
+                return false;
+            }
+        }
+        return true;
+    }
 }
