@@ -243,11 +243,24 @@ public class Solution {
         return headNode;
     }
 }
-
-   /**
-     * Arrays- DS HackerRank :- Data structures :- Arrays 
-	 * #HackerRank :- https://www.hackerrank.com/challenges/arrays-ds
-     */
+/**
+*Tree: Preorder Traversal
+*You are given a pointer to the root of a binary tree; print the values in preorder traversal.
+*You only have to complete the function.
+*https://www.hackerrank.com/challenges/tree-preorder-traversal
+*/
+	void Preorder(Node root) {
+		// for pre order Data > left > right
+		if(root!=null){
+			System.out.print(root.data + " ");
+			Preorder(root.left);
+			Preorder(root.right);
+		}
+	}
+/**
+ * Arrays- DS HackerRank :- Data structures :- Arrays 
+ * #HackerRank :- https://www.hackerrank.com/challenges/arrays-ds
+ */
     public static void printArrayInReverse() {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         try {
@@ -267,10 +280,10 @@ public class Solution {
         }
     }
 
-    /**
-     * 2D Array - DS HackerRank :- Data structures :- Arrays 
-	 * #HackerRank :- https://www.hackerrank.com/challenges/2d-array
-     */
+/**
+ * 2D Array - DS HackerRank :- Data structures :- Arrays 
+ * #HackerRank :- https://www.hackerrank.com/challenges/2d-array
+ */
     static int getLargestHourGlass(int maxLength) {
         int result = 0;
         boolean isFirstDone = false;
@@ -313,11 +326,11 @@ public class Solution {
     }
 	
 	
-    /**
-     * HackerRank maximum sub array problem
-     * https://www.hackerrank.com/contests/codemania-1/challenges/maxsubarray/
-     * submissions/code/4087353
-     */
+/**
+ * HackerRank maximum sub array problem
+ * https://www.hackerrank.com/contests/codemania-1/challenges/maxsubarray/
+ * submissions/code/4087353
+ */
     static void getMaxSubArraySum() {
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
