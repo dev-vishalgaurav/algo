@@ -258,6 +258,89 @@ public class Solution {
 		}
 	}
 /**
+*Tree: Post order Traversal
+*You are given a pointer to the root of a binary tree; print the values in post order traversal.
+*You only have to complete the function.
+*https://www.hackerrank.com/challenges/tree-postorder-traversal
+*/
+	void Postorder(Node root) {
+	 // for post order Left -> Right -> Data
+	 if(root!=null){
+			Postorder(root.left);
+			Postorder(root.right);
+			System.out.print(root.data + " ");
+		}
+	}
+/**
+*Tree: In order Traversal
+*You are given a pointer to the root of a binary tree; print the values in inorder traversal.
+*You only have to complete the function.
+*https://www.hackerrank.com/challenges/tree-inorder-traversal
+*/
+	void Inorder(Node root) {
+	// for In order Left -> Data -> Right
+		 if(root!=null){
+			 Inorder(root.left);
+			 System.out.print(root.data + " ");
+			 Inorder(root.right);
+		}
+	}
+/**
+*Tree: Level order Traversal
+*You are given a pointer to the root of a binary tree. You need to print the level order traversal of this tree. In level order traversal, we visit the nodes level by level from left to right. 
+*You only have to complete the function. 
+*https://www.hackerrank.com/challenges/tree-level-order-traversal
+*/
+void LevelOrder(Node rootNode){
+   if (rootNode != null) {
+		List<Node> queue = new ArrayList<>();
+		queue.add(rootNode);
+		while (queue.size() > 0) {
+			Node nextNode = queue.remove(0); // pop from queue
+			if (nextNode.left != null) {
+				queue.add(nextNode.left);
+			}
+			if (nextNode.right != null) {
+				queue.add(nextNode.right);
+			}
+			System.out.print( nextNode.data + " ");
+		}
+	}  
+}
+/**
+*Tree: height of a tree 
+*The height of a binary tree is the number of nodes on the largest path from root to any leaf. You are given a pointer to the root of a binary tree. Return the height of the tree. 
+*You only have to complete the function.
+*https://www.hackerrank.com/challenges/tree-height-of-a-binary-tree
+*/
+	int height(Node root){
+		// if root = null return 0 else return height() + 1
+		return (root == null) ? 0 : max(height(root.left), height(root.right)) + 1 ;
+	}
+/**
+*helper method to get max of 2 numbers
+*/
+	int max(int first, int second){
+		return (first > second) ? first : second;
+	}
+/**
+*Tree: insert an element 
+*You are given a pointer to the root of a binary search tree and a value to be inserted into the tree. Insert this value into its appropriate position in the binary search tree and return the root of the updated binary tree. 
+*You just have to complete the function.
+*https://www.hackerrank.com/challenges/binary-search-tree-insertion
+*/
+	static Node Insert(Node root,int value){
+		if(root == null){
+			root = new Node();
+			root.data = value;
+		}else if(value <= root.data){
+			root.left = Insert(root.left,value);
+		}else{
+			root.right = Insert(root.right,value);
+		}
+		return root;
+	}
+/**
  * Arrays- DS HackerRank :- Data structures :- Arrays 
  * #HackerRank :- https://www.hackerrank.com/challenges/arrays-ds
  */
