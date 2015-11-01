@@ -1,4 +1,7 @@
-
+/**
+*@author vishal gaurav 
+* vishal<dot>gaurav<at>hotmail<dot>com
+*/
 public class Solution {
   /*Node is defined as */
     class Node {
@@ -340,6 +343,63 @@ void LevelOrder(Node rootNode){
 		}
 		return root;
 	}
+/**
+*Hacker rank huffman decoding problem.
+*Huffman coding assigns variable length codewords to fixed length input characters based on their frequencies. 
+*More frequent characters are assigned shorter codewords and less frequent characters are assigned longer codewords.
+*A huffman tree is made for the input string and characters are decoded based on their position in the tree.
+*We add a '0' to the codeword when we move left in the binary tree and a '1' when we move right in the binary tree. 
+*We assign codes to the leaf nodes which represent the input characters.
+*	https://www.hackerrank.com/challenges/tree-huffman-decoding
+* 		class Node{
+*     	 public  int frequency; // the frequency of this tree
+*     	 public  char data;
+*      	 public  Node left, right;
+*       }
+*/
+	void decode(String S ,Node root){
+        Node currentNode = root;
+        char[] inputArray = S.toCharArray();
+        int count = 0 ;
+        String decodedString = "";
+        while(count < inputArray.length){
+            int currentChar = Integer.parseInt(""+inputArray[count]);
+            currentNode = (currentChar == 0)? currentNode.left : currentNode.right;
+            if(currentNode.right == null && currentNode.left == null){
+                decodedString = decodedString + currentNode.data;
+                currentNode = root;
+            }
+            count++ ;
+        }
+        System.out.println(decodedString);
+    }
+/**
+*Hacker rank lowest common ancestor problem
+*Node is defined as :
+*You are given pointer to the root of the binary search tree and two values v1 and v2. 
+*You need to return the lowest common ancestor (LCA) of v1 and v2 in the binary search tree. 
+*You only need to complete the function.
+*class Node {
+*   int data;
+*   Node left;
+*   Node right;
+ }
+*https://www.hackerrank.com/challenges/binary-search-tree-lowest-common-ancestor
+*/
+	Node lca(Node root,int v1,int v2){
+		// logic is to determine when both the nodes V1 and V2 are going to separate in different branchs
+        while(root!=null){
+            int rootValue = root.data;
+            if(v1 < rootValue && v2 < rootValue){
+                root = root.left ;
+            }else  if(v1 >  rootValue && v2 > rootValue){
+                root = root.right;
+            }else{
+                break;
+            }
+        }
+       return root;
+    }
 /**
  * Arrays- DS HackerRank :- Data structures :- Arrays 
  * #HackerRank :- https://www.hackerrank.com/challenges/arrays-ds
