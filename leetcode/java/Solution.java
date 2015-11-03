@@ -121,4 +121,101 @@ public class Solution {
             return false;
         }
     }
+/**
+*Leetcode HIndex question
+*Given an array of citations (each citation is a non-negative integer) of a researcher, write a function to compute the researcher's h-index.
+*According to the definition of h-index on Wikipedia: "A scientist has index h if h of his/her N papers have at least h citations each, and the other N − h papers have no more than h citations each."
+*For example, given citations = [3, 0, 6, 1, 5], which means the researcher has 5 papers in total and each of them had received 3, 0, 6, 1, 5 citations respectively. Since the researcher has 3 papers with at least 3 citations each and the remaining two with no more than 3 citations each, his h-index is 3.
+*
+*Note: If there are several possible values for h, the maximum one is taken as the h-index.
+*https://leetcode.com/problems/h-index/
+*/
+	public int hIndex(int[] citations) {
+        int result = 0 ;
+        MergeSort(citations,citations.length);
+        for(int i = 0 ; i < citations.length ; i++){
+            if( citations[i] == 0 ||  citations[i] < i+1){
+                break;
+            }else{
+                 result = i + 1;
+            }
+        }
+        
+        return result;
+    }
+
+    /**
+     * not an inplace sorting algorithm. 
+     * stable algorithm (relative order remains the same)
+     * O(n) space complexity
+     * @param arrayToBeSorted
+     * @param length
+     */
+    public void MergeSort(int[] arrayToBeSorted, int length ){
+        if(arrayToBeSorted.length > 1){
+            int minIndex = getMinIndex(arrayToBeSorted.length - 1);
+            int[] leftHalf = (int[]) getNewSubArray(arrayToBeSorted, 0, minIndex);
+            int[] rightHalf = (int[]) getNewSubArray(arrayToBeSorted, minIndex + 1, arrayToBeSorted.length - 1);
+            System.out.println("First half - " + arrayToBeSorted.length);
+            MergeSort(leftHalf, leftHalf.length);
+            System.out.println("Second half - " + arrayToBeSorted.length);
+            MergeSort(rightHalf, rightHalf.length);
+            mergeSortedArray(leftHalf, rightHalf, arrayToBeSorted);
+        }
+    }
+    /**
+     * returns a new sub array and assumes indexes as inclusive
+     * @param originalArray
+     * @param indexStart
+     * @param indexLast
+     * @return
+     */
+    private int[] getNewSubArray(int[] originalArray, int indexStart, int indexLast){
+        int[] resultArray = new int[indexLast - indexStart + 1];
+        int resultIndex = 0 ;
+        for(int count = indexStart ; count <= indexLast ; count ++){
+            resultArray[resultIndex] = originalArray[count];
+            resultIndex++;
+        }
+        return resultArray;
+    }
+    private int getMinIndex(int arrayLength){
+        return ((arrayLength % 2 == 0) ? arrayLength / 2 : (arrayLength + 1) / 2) - 1;
+    }
+    /**
+     * method to merge 2 arrays 
+     * @param arrayFirst
+     * @param arraySecond
+     * @param arrayResult
+     */
+    @SuppressWarnings("unchecked")
+    private boolean mergeSortedArray(int[] arrayFirst, int[] arraySecond,int[] arrayResult){
+        boolean result = false;
+        if((arrayFirst!=null && arraySecond != null && arrayResult != null ) 
+            && (arrayResult.length == (arrayFirst.length + arraySecond.length))){ 
+            result = true;
+            int countFirst = 0 , countSecond = 0 , countResult = 0 ;
+            // run loop to the maximum of both the arrays
+            while(countFirst < arrayFirst.length || countSecond < arraySecond.length){
+                // first condition when the bounds of each array is not completed
+                if(countFirst < arrayFirst.length && countSecond < arraySecond.length){
+                    if( arrayFirst[countFirst] > arraySecond[countSecond]){
+                        arrayResult[countResult] = arrayFirst[countFirst];
+                        countFirst++;
+                    }else{
+                        arrayResult[countResult] = arraySecond[countSecond];
+                        countSecond++;
+                    }
+                }else if (countFirst <= arrayFirst.length - 1){
+                    arrayResult[countResult] = arrayFirst[countFirst];
+                    countFirst++ ;
+                }else {
+                    arrayResult[countResult] = arraySecond[countSecond];
+                    countSecond++ ;
+                }
+                countResult++ ; 
+            }   
+        }
+        return result;
+    }
 }
