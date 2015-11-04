@@ -143,7 +143,25 @@ public class Solution {
         
         return result;
     }
-
+/**
+* 
+* Leetcode h-index follow up problem.
+* what if the citations array is sorted in ascending order? Could you optimize your algorithm?
+* https://leetcode.com/problems/h-index-ii/
+**/
+	public int hIndexS(int[] citations) {
+		int count = citations.length - 1 ;
+		int result = 0;
+		while(count>=0){
+			if(citations[count] == 0 || citations[count] < (citations.length - count)){
+				break;
+			}else{
+				result = citations.length - count ;
+			}
+			count--;
+		}
+		return result;
+	}
     /**
      * not an inplace sorting algorithm. 
      * stable algorithm (relative order remains the same)
