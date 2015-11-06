@@ -406,5 +406,29 @@ public class Solution {
         TreeLinkNode node;
         int level;
     }
-
+/**
+*Leetcode remove elements from a linked list
+*Remove all elements from a linked list of integers that have value val.
+*Example
+*Given: 1 --> 2 --> 6 --> 3 --> 4 --> 5 --> 6, val = 6
+*Return: 1 --> 2 --> 3 --> 4 --> 5
+* https://leetcode.com/problems/remove-linked-list-elements/
+*/
+	public ListNode removeElements(ListNode head, int val) {
+        ListNode prevNode = null;
+        ListNode headNode = head;
+        while(head!=null){
+            if(head.val == val){
+                if(prevNode == null){
+                    headNode = head.next;
+                }else{
+                    prevNode.next = head.next;
+                }
+            }else{ // changing prevNode only when continuous values are not same as val
+                prevNode = head;
+            }
+            head = head.next;
+        }
+       return headNode;
+    }
 }
