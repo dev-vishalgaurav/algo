@@ -431,4 +431,34 @@ public class Solution {
         }
        return headNode;
     }
+/**
+*Leetcode - remove all instances of that value in place and return the new length.
+*Given an array and a value, remove all instances of that value in place and return the new length.
+*The order of elements can be changed. It doesn't matter what you leave beyond the new length.
+*https://leetcode.com/problems/remove-element/
+*/
+	public int removeElement(int[] nums, int val) {
+        int totalFound = 0 ; 
+        int backPosition = nums.length - 1; // to refer positions from back to replace.
+        int count = 0 ; 
+        while(count < nums.length && backPosition >= count){
+            if(nums[count] == val){
+                totalFound++;
+                while(backPosition > count && nums[backPosition] == val){
+                    totalFound++; // there are more element which is equal to val
+                    backPosition--;
+                }
+                if(backPosition > count){
+					nums[count] = nums[backPosition];
+					nums[backPosition] = 0;
+					backPosition--;
+                }else{
+				  // no places to swap positions
+                  break;
+                }
+            }
+            count++;
+        }
+        return nums.length - totalFound;
+    }
 }
