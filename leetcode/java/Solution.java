@@ -463,9 +463,10 @@ public class Solution {
     }
 /**
 *Leetcode
-*Write a function to delete a node (except the tail) in a singly linked list, given only access to that node.
-*Supposed the linked list is 1 -> 2 -> 3 -> 4 and you are given the third node with value 3, the linked list should become 1 -> 2 -> 4 after calling your function.
-*https://leetcode.com/problems/delete-node-in-a-linked-list/
+* Write a function to delete a node (except the tail) in a singly linked list, 
+* given only access to that node. Supposed the linked list is 1 -> 2 -> 3 -> 4 and you are given 
+* the third node with value 3,the linked list should become 1 -> 2 -> 4 after calling your function.
+* https://leetcode.com/problems/delete-node-in-a-linked-list/
 */
 	public void deleteNode(ListNode node) {
       if(node.next!=null){
@@ -473,4 +474,65 @@ public class Solution {
           node.next=node.next.next;
       }
     }
+/**
+* Leetcode reorder list question.
+* Given a singly linked list L: L0→L1→…→Ln-1→Ln,
+* reorder it to: L0→Ln→L1→Ln-1→L2→Ln-2→…
+* You must do this in-place without altering the nodes' values.
+* For example,
+* Given {1,2,3,4}, reorder it to {1,4,2,3}.
+* https://leetcode.com/problems/reorder-list/
+*/
+    public static void reorderList(ListNode head) {
+        if (head != null && head.next != null && head.next.next != null) {
+            ListNode headNode = head;
+            Stack<ListNode> stack = new Stack<ListNode>();
+            int length = 0;
+            while (head != null) {
+                length++;
+                stack.push(head);
+                head = head.next;
+            }
+            head = headNode;
+            int count = 0;
+            int limit = (length / 2) - 1;
+            while (count <= limit) {
+                ListNode firstNode = head;
+                head = head.next;
+                ListNode secondNode = stack.pop();
+                ListNode lastNode = stack.peek();
+                ListNode thirdNode = firstNode.next;
+                if (firstNode != lastNode) {
+                    firstNode.next = secondNode;
+                    secondNode.next = thirdNode;
+                    lastNode.next = null;
+                }
+                count = count + 1;
+            }
+        }
+    }
+	public void reorderListNaive(ListNode head) {
+		if(head!=null){    
+          while(head.next != null){
+                ListNode firstNode = head;
+                ListNode secondNode = null; 
+                ListNode thirdNode = head.next;
+                ListNode lastNode = head.next;
+                head = head.next;
+                ListNode previousNode = null;
+                while(lastNode.next!= null){
+                    previousNode = lastNode;
+                    lastNode = lastNode.next;
+                }
+                if(previousNode!= null && previousNode != firstNode){
+                    previousNode.next = null;
+                    secondNode = lastNode;
+                    firstNode.next = secondNode;
+                    secondNode.next = thirdNode;
+                }
+            }
+            
+        }
+    }
+
 }
