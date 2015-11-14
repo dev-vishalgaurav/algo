@@ -534,5 +534,26 @@ public class Solution {
             
         }
     }
-
+/**
+ * Leetcode summary ranges problem.
+ * Given a sorted integer array without duplicates, return the summary of its ranges.
+ * For example, given [0,1,2,4,5,7], return ["0->2","4->5","7"].
+ * https://leetcode.com/problems/summary-ranges/
+ * @param nums sorted array without duplicates
+ * @return List with ranges in it.
+ */
+    public List<String> summaryRanges(int[] nums) {
+        List<String> results = new ArrayList<String>();
+        int count = 0;
+        while(count < nums.length){
+            int startNumber = nums[count];
+            while(count + 1 < nums.length && (nums[count + 1] - nums[count] == 1)){
+                count++;
+            }
+            String currentResult = (nums[count] != startNumber) ? startNumber + "->" + nums[count] : ""+ startNumber;
+            results.add(currentResult);
+            count++;
+        }
+        return results;
+    }
 }
