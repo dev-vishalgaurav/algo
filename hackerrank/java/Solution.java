@@ -422,7 +422,6 @@ void LevelOrder(Node rootNode){
             e.printStackTrace();
         }
     }
-
 /**
  * 2D Array - DS HackerRank :- Data structures :- Arrays 
  * #HackerRank :- https://www.hackerrank.com/challenges/2d-array
@@ -503,3 +502,134 @@ void LevelOrder(Node rootNode){
             e.printStackTrace();
         }
     }
+/**
+* HackerRank Sorting tutorial Intro.
+* HackerRank -> Algorithm -> Sorting -> Intro
+* https://www.hackerrank.com/challenges/tutorial-intro/ 
+*/
+	public static void runTutorialIntro(){
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+            int searchValue = Integer.parseInt(reader.readLine());
+            int inputLength = Integer.parseInt(reader.readLine());
+            String numArray[] = reader.readLine().split(" ");
+            boolean isAscending = (numArray.length > 1 && Integer.parseInt(numArray[0]) <= Integer.parseInt(numArray[1]));
+            System.out.println(binarySearch(numArray,searchValue,0,numArray.length - 1,isAscending));
+         } catch (NumberFormatException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+/**
+*	method for binary search. returns the index of search location if found else -1
+*/
+    public static int binarySearch(String[] numbers,int searchValue, int startLocation, int endLocation, boolean isAscending){
+        int result = -1;
+        if(startLocation <= endLocation){
+            int mid = (endLocation + startLocation )/ 2;
+            int midValue =  Integer.parseInt(numbers[mid]);
+            if(midValue != searchValue){
+                result = (searchValue > midValue && isAscending) ? binarySearch(numbers,searchValue,mid + 1, endLocation,isAscending) : binarySearch(numbers,searchValue,startLocation, mid - 1,isAscending);
+            }else{
+                result =  mid;
+            }
+        }
+        return result;
+    }
+/**
+* HackerRank Insertion Sort - Part 1 problem.
+* HackerRank -> Algorithm -> Sorting -> InsertionSort 1 
+* https://www.hackerrank.com/challenges/insertionsort1/
+*/	
+	public static void insertIntoSorted(int[] ar) {
+        int insertValue = ar[ar.length - 1];
+        int count = ar.length - 1;
+        while(count - 1 >= 0 && ar[count - 1] > insertValue){
+                ar[count] = ar[count -1];
+                printArray(ar);
+                count--;
+        }
+        ar[count] = insertValue;
+        printArray(ar);
+    }
+/**
+* this method was provide with the code
+*/
+	private static void printArray(int[] ar) {
+      for(int n: ar){
+         System.out.print(n+" ");
+      }
+        System.out.println("");
+    }
+/**
+* HackerRank Insertion Sort - Part 2 problem.
+* HackerRank -> Algorithm -> Sorting -> InsertionSort 2
+* https://www.hackerrank.com/challenges/insertionsort2/
+*/
+	public static void insertionSortPart2(int[] ar){       
+           // Fill up the code for the required logic here
+           // Manipulate the array as required
+           // The code for Input/Output is already provided
+        for(int count = 1 ; count < ar.length ; count++){
+            int innerCount = count;
+            int insertValue = ar[count];
+            while(innerCount - 1 >= 0 &&  ar[innerCount - 1] >= insertValue){
+                ar[innerCount] = ar[innerCount - 1];
+                ar[innerCount - 1] = insertValue;
+                innerCount--;
+            }
+            printArray(ar);
+        }
+    }
+/**
+* HackerRank Correctness and the Loop Invariant problem.
+* HackerRank -> Algorithm -> Sorting -> Correctness and the Loop Invariant problem
+* https://www.hackerrank.com/challenges/correctness-invariant
+* 
+*/
+	public static void insertionSort(int[] A){
+        for(int i = 1; i < A.length; i++){
+            int value = A[i];
+            int j = i - 1;
+            while(j >= 0 && A[j] > value){
+                A[j + 1] = A[j];
+                j = j - 1;
+            }
+            A[j + 1] = value;
+        }
+
+        printArray(A);
+    }
+/**
+* Hacker rank count number of shifts in insertion sort problem.
+* Desc :- Can you modify your previous Insertion Sort implementation to keep track of the number of shifts it makes while sorting? 
+* The only thing you should print is the number of shifts made by the algorithm to completely sort the array. 
+* A shift occurs when an element's position changes in the array. Do not shift an element if it is not necessary
+* HackerRank -> Algorithm -> Sorting -> Correctness and the Loop Invariant problem
+* https://www.hackerrank.com/challenges/runningtime
+*/
+    public static void countShiftsForInsertionSort() {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        try {
+            int number = Integer.parseInt(reader.readLine());
+            String[] A = reader.readLine().split(" ");
+            int result = 0;
+            for (int i = 1; i < A.length; i++) {
+                int value = Integer.parseInt(A[i]);
+                int j = i - 1;
+                while (j >= 0 && Integer.parseInt(A[j]) > value) {
+                    A[j + 1] = A[j];
+                    j = j - 1;
+                    result++;
+                }
+                A[j + 1] = String.valueOf(value);
+            }
+            System.out.println(result);
+
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }	
