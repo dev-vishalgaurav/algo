@@ -580,4 +580,19 @@ public class Solution {
         }
         return result;
     }
+/**
+* Leet code missing number problem. 
+* Given an array containing n distinct numbers taken from 0, 1, 2, ..., n, find the one that is missing from the array.
+* For example,
+* Given nums = [0, 1, 3] return 2.
+* https://leetcode.com/problems/missing-number/
+* Note : This silution has time complexity of O(n) and memory Complexity of O(n)
+*/	
+	public int missingNumber1(int[] nums) {
+        int result = nums.length ;
+        for(int i = 0 ; i < nums.length ; i ++){
+                result -= (nums[i] - i);
+        }
+        return result;
+    }
 }
