@@ -586,13 +586,38 @@ public class Solution {
 * For example,
 * Given nums = [0, 1, 3] return 2.
 * https://leetcode.com/problems/missing-number/
-* Note : This silution has time complexity of O(n) and memory Complexity of O(n)
+* Note : This silution has time complexity of O(n) 
 */	
 	public int missingNumber1(int[] nums) {
         int result = nums.length ;
         for(int i = 0 ; i < nums.length ; i ++){
                 result -= (nums[i] - i);
         }
+        return result;
+    }
+/**
+* Leet code missing number problem. 
+* Given an array of integers, every element appears twice except for one. Find that single one.
+* https://leetcode.com/problems/single-number/
+* Note : This solution has time complexity of O(n) 
+*/  
+    public static int singleNumber(int[] nums) {
+        HashMap<Integer,Integer> countMap = new HashMap<Integer,Integer>();
+        int result = -1;
+        for(int i = 0 ; i < nums.length ; i++){
+            if(countMap.containsKey(nums[i])){
+                int totalCount = countMap.get(nums[i]) + 1 ;
+                countMap.put(nums[i],totalCount);
+            }else{
+                countMap.put(nums[i],1);
+            }
+        }
+         for(int i = 0 ; i < nums.length ; i++){
+             if(countMap.get(nums[i]) == 1 ){
+                 result = nums[i];
+                 break;
+             }
+         }
         return result;
     }
 }
