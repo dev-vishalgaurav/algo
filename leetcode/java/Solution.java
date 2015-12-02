@@ -601,7 +601,7 @@ public class Solution {
 * https://leetcode.com/problems/single-number/
 * Note : This solution has time complexity of O(n) 
 */  
-    public static int singleNumber(int[] nums) {
+    public int singleNumber(int[] nums) {
         HashMap<Integer,Integer> countMap = new HashMap<Integer,Integer>();
         int result = -1;
         for(int i = 0 ; i < nums.length ; i++){
@@ -619,5 +619,36 @@ public class Solution {
              }
          }
         return result;
+    }
+/**
+ * Given an unsorted integer array, find the first missing positive integer.
+ * For example,
+ * Given [1,2,0] return 3,
+ * and [3,4,-1,1] return 2
+ * Note : This solution has time complexity of O(n) and memory complexity of O(n)
+ * https://leetcode.com/problems/first-missing-positive/
+ */  
+    public int firstMissingPositive(int[] nums) {
+        int result = 1 ;
+        int maxNumber = 0 ; 
+        for(int i = 0 ; i < nums.length ; i++){
+            if(nums[i] > maxNumber){
+                maxNumber = nums[i];
+            }
+        }
+        
+       int[] totalNums = new int[maxNumber+2];
+       for(int i = 0 ; i < nums.length ; i++){
+           if(nums[i] > 0){
+               totalNums[nums[i]]++;
+           }
+       }
+       for(int i = 1 ; i < totalNums.length ; i++){
+           if(totalNums[i] == 0){
+              result = i;
+              break;
+           }
+       }
+       return result;
     }
 }
