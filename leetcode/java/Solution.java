@@ -651,4 +651,28 @@ public class Solution {
        }
        return result;
     }
+/**
+* Leetcode maximum depth problem. 
+* Given a binary tree, find its maximum depth.
+* The maximum depth is the number of nodes along the longest path from the root node down to the farthest leaf node.
+* https://leetcode.com/problems/maximum-depth-of-binary-tree/
+*/
+	public int maxDepth(TreeNode root) {
+        return (root == null) ? 0 : max(maxDepth(root.left),maxDepth(root.right)) + 1 ;
+    }
+	private int max(int first, int second){
+        return (first > second) ? first : second ;
+    }
+/**
+* Leetcode minimum depth problem. 
+* Given a binary tree, find its minimum depth.
+* The minimum depth is the number of nodes along the shortest path from the root node down to the nearest leaf node.
+* https://leetcode.com/problems/minimum-depth-of-binary-tree/
+*/
+	public int minDepth(TreeNode root) {
+        return (root == null) ? 0 : ((root.left == null || root.right == null) ? max( minDepth(root.left), minDepth(root.right))  :  min( minDepth(root.left), minDepth(root.right))) + 1 ;
+    }
+	private int min(int first, int second){
+        return (first < second) ? first : second ;
+    }
 }
