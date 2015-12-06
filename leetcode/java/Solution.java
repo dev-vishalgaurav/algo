@@ -780,4 +780,64 @@ public class Solution {
             matrix[row][i] = 0 ;
         }
     }
+/**
+ * Leetcode is linked list palindrome problem
+ * Given a singly linked list, determine if it is a palindrome.
+ * Follow up:
+ * Could you do it in O(n) time and O(1) space?
+ * https://leetcode.com/problems/palindrome-linked-list/
+ */
+	public boolean isPalindrome(ListNode head){
+        boolean result = false;
+        if(head != null && head.next != null){
+            result = true;
+            ListNode slow = head;
+            ListNode fast = head.next;
+            ListNode firstHalfHeadR = null; // pointer to first half head from reverse
+            ListNode secondHalfHead = null;
+            while(fast != null){
+                if(fast.next == null){
+                    // list is even. time to break apart
+                    // break into half
+                    secondHalfHead = slow.next;
+                    slow.next = firstHalfHeadR;
+                    firstHalfHeadR = slow;
+                    fast = null;
+                }else if(fast.next.next == null){
+                    // list is odd. time to break apart
+                    // break first half;
+                    // break middle
+                    // skip the middle node
+                    secondHalfHead = slow.next.next;
+                    slow.next.next = null; // breaking the middle item
+                    slow.next = firstHalfHeadR;
+                    firstHalfHeadR = slow;
+                    fast = null;
+                }else{
+                    // keep reversing the first half
+                    if(firstHalfHeadR == null){
+                        firstHalfHeadR = slow;
+                        slow = slow.next;
+                    }else{
+                        ListNode currentNode = slow;
+                        slow = slow.next;
+                        currentNode.next = firstHalfHeadR;
+                        firstHalfHeadR = currentNode;
+                    }
+                    fast = fast.next.next;
+                }
+            }
+            while(firstHalfHeadR !=null && secondHalfHead!=null){
+                if(firstHalfHeadR.val != secondHalfHead.val){
+                    result = false;
+                    break;
+                }
+                firstHalfHeadR = firstHalfHeadR.next;
+                secondHalfHead = secondHalfHead.next;
+            }
+        }else{
+            result = true;
+        }
+        return result;
+    }
 }
