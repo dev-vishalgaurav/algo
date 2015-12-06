@@ -701,4 +701,83 @@ public class Solution {
     public int getHeight(TreeNode root){
         return (root == null) ? 0 : max(getHeight(root.left),getHeight(root.right)) + 1 ; 
     }
+	/**
+ * 
+ * Leetcode set column rows to problem
+ * Given a m x n matrix, if an element is 0, set its entire row and column to 0. Do it in place.
+ * https://leetcode.com/problems/set-matrix-zeroes/
+ */
+    public void setZeroes(int[][] matrix){
+        boolean isFirstRowZero = false;
+        boolean isFirstColumnZero = false;
+        for(int row = 0 ; row < matrix.length ; row++){
+            for(int column = 0 ; column < matrix[0].length ; column++){
+                if(matrix[row][column] == 0 ){
+                    matrix[row][0] = 0 ;
+                    matrix[0][column] = 0;
+                    if(row == 0 && !isFirstRowZero){
+                        isFirstRowZero = true;
+                    }
+                    if(column == 0 && !isFirstColumnZero){
+                        isFirstColumnZero = true;
+                    }
+                }
+            }
+        }
+        for(int row = 1 ; row < matrix.length ; row++){
+            if(matrix[row][0] == 0){
+                setRowToZero(matrix, row);
+            }
+        }
+        for(int column = 1 ; column < matrix[0].length ; column++){
+            if(matrix[0][column] == 0 ){
+                setColumnToZero(matrix, column);
+            }
+        }
+        if(isFirstColumnZero){
+            setColumnToZero(matrix, 0);
+        }
+        if(isFirstRowZero){
+            setRowToZero(matrix, 0);
+        }
+    }
+/**
+ * 
+ * Leetcode set column rows to problem
+ * <Naive Solution>
+ * Given a m x n matrix, if an element is 0, set its entire row and column to 0. Do it in place.
+ * https://leetcode.com/problems/set-matrix-zeroes/
+ */
+    public void setZeroesNaive(int[][] matrix) {
+        int[] rows = new int[matrix.length];
+        int[] columns = new int[matrix[0].length];
+        for(int row = 0 ; row < matrix.length ; row++){
+            for(int column = 0 ; column < matrix[0].length ; column++){
+                if(matrix[row][column] == 0 ){
+                    rows[row] = 1 ;
+                    columns[column] = 1 ;
+                }
+            }
+        }
+        for(int row = 0 ; row < rows.length ; row++){
+            if(rows[row] == 1){
+                setRowToZero(matrix,row);
+            }
+        }
+        for(int column = 0 ; column < columns.length ; column++){
+            if(columns[column] == 1){
+                setColumnToZero(matrix,column);
+            }
+        }
+    }
+    public void setColumnToZero(int[][] matrix, int column){
+        for(int i = 0 ; i < matrix.length ; i++){
+            matrix[i][column] = 0 ;
+        }
+    }
+    public void setRowToZero(int[][] matrix, int row){
+        for(int i = 0 ; i < matrix[0].length ; i++){
+            matrix[row][i] = 0 ;
+        }
+    }
 }
