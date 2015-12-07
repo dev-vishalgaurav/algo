@@ -840,4 +840,44 @@ public class Solution {
         }
         return result;
     }
+	/**
+ * finding isPalindrome integer without recursion and in O(n) space complexity
+ * 
+ * Determine whether an integer is a palindrome. Do this without extra space.
+ * Some hints:
+ * Could negative integers be palindromes? (ie, -1)
+ * If you are thinking of converting the integer to string, note the restriction of using extra space.
+ * You could also try reversing an integer. However, if you have solved the problem "Reverse Integer", you know that the reversed integer might overflow. How would you handle such case?
+ * There is a more generic way of solving this problem.
+ * 
+ * https://leetcode.com/problems/palindrome-number/
+ */
+    public boolean isPalindrome(int x) {
+        boolean result = x >= 0;
+        if (result) {
+            int digits = getDigits(x);
+            int smallestNumber = (int) Math.pow(10, digits - 1);
+            while (x > 0) {
+                int firstNumber = x / smallestNumber;
+                int lastNumber = x % 10;
+                if (firstNumber != lastNumber) {
+                    result = false;
+                    break;
+                }
+                x = x - firstNumber*smallestNumber;
+                x = x / 10;
+                smallestNumber = smallestNumber / 100;
+            }
+        }
+        return result;
+    }
+    private int getDigits(int number){
+        int digits = 0 ; 
+        while(number>0){
+            number = number/10;
+            digits++ ;
+        }
+        return digits;
+    }
+
 }
