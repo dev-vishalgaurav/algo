@@ -879,5 +879,42 @@ public class Solution {
         }
         return digits;
     }
-
+/**
+ *Leetcode missing Rectangle area problem. 
+ *Find the total area covered by two rectilinear rectangles in a 2D plane.
+ *Each rectangle is defined by its bottom left corner and top right corner as shown in the figure.
+ *Assume that the total area is never beyond the maximum possible value of int.
+ *https://leetcode.com/problems/rectangle-area/
+ */  
+    public  int computeArea(int A, int B, int C, int D, int E, int F, int G, int H) {
+        int width1 = C- A ;
+        int height1 = D - B ;
+        int width2 = G - E ;
+        int height2 = H - F ;
+        int commonWidth = getCommon(A,C,E,G) ;
+        int commonHeight = getCommon(B,D,F,H) ;
+        int totalArea = area(width1,height1) + area(width2,height2) - area(commonWidth,commonHeight);
+        return totalArea;
+    }
+    public  int getCommon(int C1, int C2, int D1, int D2){
+        int result = 0 ;
+            if( D1 <= C1 && D2 > C1 && D2 <= C2   ){
+                // left intersection
+                result = D2 - C1;
+            }else if(D1 >= C1 && D1 < C2 && D2 >= C2){
+                // right intersection
+                result = C2 - D1 ;
+            }else if(D1 > C1 && D1 < C2 && D2 > C1 && D2 < C2){
+                // in between
+                result = D2-D1 ;
+            }else if (D1 < C1 && D2 > C2){
+                result = C2-C1;
+            }else if(D1 == C1 && D2 == C2){
+                result = D2 - D1 ;// or C2 - C1 ;
+            }
+        return result ;
+    }
+    public  int area(int width, int height){
+        return width*height;
+    }
 }
