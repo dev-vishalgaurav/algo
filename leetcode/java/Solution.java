@@ -917,4 +917,32 @@ public class Solution {
     public  int area(int width, int height){
         return width*height;
     }
+    /**
+     * Leetcode maxSubArray problem including all negative values. O(n) time complexity.
+     * 
+     * Find the contiguous subarray within an array (containing at least one number) which has the largest sum.
+     * For example, given the array [−2,1,−3,4,−1,2,1,−5,4],
+     * the contiguous subarray [4,−1,2,1] has the largest sum = 6.
+     * 
+     * https://leetcode.com/problems/maximum-subarray/
+     */
+    public int maxSubArray(int[] nums) {
+        int maxSum = 0;
+        if (nums.length > 0) {
+            int maxEndingHere = nums[0];
+            maxSum = nums[0];
+            for (int count = 1; count < nums.length; count++) {
+                int nextSum = maxEndingHere + nums[count];
+                if(maxEndingHere >= 0){
+                    maxEndingHere = (nextSum >= 0) ? nextSum : nums[count] ;
+                }else{
+                    if(nums[count] > maxEndingHere ){
+                        maxEndingHere = nums[count];
+                    }
+                }
+                maxSum = (maxEndingHere > maxSum) ? maxEndingHere : maxSum;
+            }
+        }
+        return maxSum;
+    }
 }
