@@ -945,4 +945,56 @@ public class Solution {
         }
         return maxSum;
     }
+/**
+* Leetcode mySqrt problem in java.
+* Implement int sqrt(int x).
+* Compute and return the square root of x.
+* https://leetcode.com/problems/sqrtx/
+*/
+	public int mySqrtNaive(int x) {
+		int result = 0;
+		if (x > 0) {
+			result = 1;
+			int count = 1;
+			int next = (count+1)*(count+1);
+			while(x > 1 && next > 0 && next <= x){
+				count++;
+				next = (count + 1 ) * (count+1);
+			}
+			result = count;
+		}
+		return result;
+	}
+/**
+ * Leetcode mySqrt problem in java. log(n) complexity
+ * Implement int sqrt(int x).
+ * Compute and return the square root of x.
+ * https://leetcode.com/problems/sqrtx/
+ */
+	public int mySqrt(int x) {
+		int result = 0;
+		int low = 1 ; 
+		int high = x;
+		int mid = 1;
+		while(low <= high){
+			mid = low + (high - low)/2;
+			/*
+			 * mid*mid <= x
+			 * mid <= x/mid  // for the overflow
+			 * 
+			 */
+			if(mid > x/mid){
+				high = mid - 1 ; 
+				
+			}else{
+				if((mid + 1) > x / (mid + 1)){
+					result = mid ;
+					break;
+				}
+				low = mid + 1; 
+						
+			}
+		}
+		return result;
+	}
 }
