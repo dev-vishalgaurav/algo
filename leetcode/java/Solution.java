@@ -997,4 +997,55 @@ public class Solution {
 		}
 		return result;
 	}
+/**
+ * Leetcode find minimum in a sorted array problem
+ * Suppose a sorted array is rotated at some pivot unknown to you beforehand.
+ * (i.e., 0 1 2 4 5 6 7 might become 4 5 6 7 0 1 2).
+ * Find the minimum element.
+ * You may assume no duplicate exists in the array.
+ * https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/
+ */
+    public int findMin(int[] nums) {
+        int min = -1;
+        int pivotIndex = getPivot(nums);
+        min = (pivotIndex == -1) ? nums[0]: nums[pivotIndex + 1] ;
+        return min;
+    }
+/*
+ * method to return mid value give high and low
+ */
+	public int getMid(int high, int low){
+		return low + (high - low)/2;
+	}
+/**
+ * this is a important method to find pivot point from where array is rotated. it uses binary search technique to find pivot.
+ * A>  1 2 3 4 5 6
+ * B>  5 6 1 2 3 4
+ * C>  9 1 2 3 4 5 6 7 8 
+ * D>  3 4 5 6 7 8 9 1 2
+ * Idea is that if an array is rotated then find a mid value which will be greater than its next value (PIVOT).
+ * if mid value is not greater than next value then we need to divide the array.
+ * For dividing the array it should be noted that if current mid value is greater than first element on the lower side of array (Array example D) then 
+ * the pivot exists in the other half of the array else pivot is in the lower half (Array example C).
+ * 
+ */
+    public int getPivot(int[] nums){
+        int pivot = -1;
+        int high = nums.length - 1;
+        int low = 0;
+        int mid  = getMid(high, low);
+        while(low <= high && mid+1 < nums.length){
+            if(nums[mid] > nums[mid + 1]){ // found
+                pivot = mid;
+                break;
+            }else if(nums[mid] < nums[low]){
+                high = mid - 1 ;
+            }else{
+                low = mid + 1;
+            }
+            mid  = getMid(high, low);
+        }
+        return pivot;
+    }
+
 }
