@@ -1047,5 +1047,89 @@ public class Solution {
         }
         return pivot;
     }
-
+/**
+ * Leetcode contains duplicate problem
+ * Given an array of integers, find if the array contains any duplicates. Your function should return true if any value appears at least 
+ * twice in the array, and it should return false if every element is distinct.
+ * https://leetcode.com/problems/contains-duplicate/
+ */
+    public boolean containsDuplicate(int[] nums) {
+        boolean result = false;
+        HashSet<Integer> map  = new HashSet<Integer>();
+        for(int i = 0 ; i < nums.length ; i++){
+            if(map.contains(nums[i])){
+                result = true;
+                break;
+            }else{
+                map.add(nums[i]);
+            }
+        }
+        return result;
+    }
+/**
+ * Leetcode search for a range problem.
+ * First it search element using binary search. if it finds it then it finds for lower bound and upper bound using binary search concept. 
+ * Given a sorted array of integers, find the starting and ending position of a given target value.
+ * Your algorithm's runtime complexity must be in the order of O(log n).
+ * If the target is not found in the array, return [-1, -1].
+ * For example,
+ * Given [5, 7, 7, 8, 8, 10] and target value 8,
+ * return [3, 4].
+ * https://leetcode.com/problems/search-for-a-range/
+ */
+    public int[] searchRange(int[] nums, int target) {
+        int[] result = {-1,-1};
+        if(nums.length > 0){
+            int index = binarySearch(nums,0,nums.length - 1,target);
+            if(index != -1){
+                result[0] = index;
+                result[1] = index;
+                // lower range check
+                result[0] = getLowerRange(nums,target,index);
+                // higher range check
+                result[1] = getUpperRange(nums,target,index);
+            }
+        }
+        return result;
+    }
+/**
+* does binary search in a sorted array and returns index if found else -1
+*/
+    public int binarySearch(int[] nums, int low, int high, int target){
+        int index = -1;
+        while(low <= high){
+            int mid = getMid(high, low);
+            if(nums[mid] == target){
+                index = mid;
+                break;
+            }else if(nums[mid] < target ){
+                low = mid + 1;
+            }else{
+                high = mid - 1 ;
+            }
+        }
+        return index;
+    }
+    public int getLowerRange(int[] nums, int target, int index){
+        int lowerRange = index;
+        if(index - 1 >= 0 && nums[index - 1] == target){
+            int next = binarySearch(nums,0,index -1,target);
+            while(next != -1){
+                lowerRange = next;
+                next = binarySearch(nums,0,next - 1, target);
+            }
+        }
+        return lowerRange;
+    }
+    public int getUpperRange(int[] nums, int target, int index){
+        int upperRange = index ;
+        if(index < nums.length - 1 && nums[index + 1] == target){
+            int next = binarySearch(nums,index + 1,nums.length - 1,target);
+            while(next != -1){
+                upperRange = next;
+                next = binarySearch(nums,next+1,nums.length - 1,target);
+            }
+        }
+        return upperRange;
+    }
 }
