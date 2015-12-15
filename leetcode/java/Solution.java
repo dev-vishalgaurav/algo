@@ -1132,4 +1132,47 @@ public class Solution {
         }
         return upperRange;
     }
+/**
+ * Leetcode search in rotated sorted array problem.
+ * 1 2 3 4 5 6
+ * 5 6 1 2 3 4
+ * 9 1 2 3 4 5 6 7 8 
+ * 3 4 5 6 7 8 9 1 2
+ * Search in Rotated Sorted Array
+ * Suppose a sorted array is rotated at some pivot unknown to you beforehand.
+ * (i.e., 0 1 2 4 5 6 7 might become 4 5 6 7 0 1 2).
+ * You are given a target value to search. If found in the array return its index, otherwise return -1.
+ * You may assume no duplicate exists in the array.
+ * https://leetcode.com/problems/search-in-rotated-sorted-array/
+ */
+    public int search(int[] nums, int target){
+        int index = -1;
+        int pivot = getPivot(nums);
+        if(pivot == -1){
+            index = binarySearch(nums, 0, nums.length - 1, target);
+        }else if (nums[pivot] == target){
+            index = pivot;
+        }else {
+            index = binarySearch(nums, 0, pivot - 1, target);
+            if(index == -1){
+                index = binarySearch(nums, pivot + 1 , nums.length - 1, target);
+            }
+        }
+        return index;
+    }
+/**
+ * Naive implementation of search in a rotated array problem.
+ */
+    public int searchNaive(int[] nums, int target) {
+        int index = -1 ;
+        for(int i = 0 ; i < nums.length ; i++){
+            if(nums[i] == target){
+                index = i ;
+                break;
+            }
+        }
+        return index;
+    }
+    
+
 }
