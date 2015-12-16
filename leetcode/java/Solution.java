@@ -1067,6 +1067,33 @@ public class Solution {
         return result;
     }
 /**
+ * Leetcode containsNearbyDuplicate problem. contains duplicate II
+ * 
+ * Given an array of integers and an integer k, find out whether there are two distinct indices i and j 
+ * in the array such that nums[i] = nums[j] and the difference between i and j is at most k.
+ * 
+ * https://leetcode.com/problems/contains-duplicate-ii/
+ */
+    public boolean containsNearbyDuplicate(int[] nums, int k) {
+        boolean result = false;
+        HashMap<Integer,Integer> map = new HashMap<Integer,Integer>();
+        for (int count = 0; count < nums.length; count++) {
+            int currentNumber = nums[count];
+            if (map.containsKey(currentNumber)) {
+                int lastPosition = map.get(currentNumber);
+                if (count - lastPosition <= k) {
+                    result = true;
+                    break;
+                } else {
+                    map.put(currentNumber, count);
+                }
+            }else{
+                map.put(currentNumber, count);
+            }
+        }
+        return result;
+    }
+/**
  * Leetcode search for a range problem.
  * First it search element using binary search. if it finds it then it finds for lower bound and upper bound using binary search concept. 
  * Given a sorted array of integers, find the starting and ending position of a given target value.
