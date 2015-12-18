@@ -32,4 +32,50 @@ public class Solution {
             System.out.print(inputArray[count] + " ");
         }
     }
+/**
+ * <p>
+ * Given an array of positive integers (excluding zero) and a target number.
+ * Detect whether there is a set of consecutive elements in the array that
+ * add up to the target. <br>
+ * <br>
+ * Example: a = {1, 3, 5, 7, 9} <br>
+ * target = 8 <br>
+ * <br>
+ * output = true ({3, 5}) <br>
+ * <br>
+ * or target = 15 <br>
+ * output = true : {3, 5, 8} <br>
+ * 
+ * Careercup question 
+ *
+ * @param inputArray
+ * @param target
+ */
+    static void findSetToTarget(int[] inputArray, int target) {
+        int currentIndex = 0;
+        int currentNumber = inputArray[currentIndex];
+        int currentSum = currentNumber;
+        int count = 1;
+        while (count < inputArray.length && currentIndex < inputArray.length) {
+            currentSum += inputArray[count];
+            if (currentSum < target) {
+                count++;
+            } else if (currentSum > target) {
+                currentIndex++;
+                count = currentIndex + 1;
+                currentSum = inputArray[currentIndex];
+            } else { // target found
+                for (int start = currentIndex; start <= count; start++) {
+                    System.out.print(inputArray[start] + " ");
+                }
+                System.out.println("");
+                currentIndex++;
+                count = currentIndex + 1;
+                currentSum = inputArray[currentIndex];
+                // find next
+
+            }
+        }
+
+    }
 }
