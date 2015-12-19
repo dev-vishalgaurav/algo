@@ -76,6 +76,41 @@ public class Solution {
 
             }
         }
-
     }
+/**
+* Method to split a list into 2 halfs.It doesn't need to be sorted it will just break the list into 2 halfs. 
+* This method can be useful to divide a linkelist into 2 halfs in 1/2 traverse of the list.
+* Space complexity O(1) and Time complexity is O(n) effectively O(N/2)
+* It will return a array of headNodes where
+* ListNode[0] = head of first half.
+* ListNode[1] = middle element if passed list was of odd length.
+* ListNode[2] = head of 2nd half of the list.
+*/
+	public ListNode[] splitListInTwo(ListNode head){
+       ListNode[] resultNode = new ListNode[3];
+       resultNode[0] = head; // first half head will always be this
+       if(head != null && head.next != null){
+           ListNode slow = head;
+           ListNode fast = head.next;
+           while(fast != null){
+               if(fast.next == null){
+                   // list is even. time to break apart
+                   resultNode[2] = slow.next;
+                   slow.next = null; // break the halfs
+                   fast = null;
+               }else if(fast.next.next == null){
+                   // list is odd. time to break apart
+                   resultNode[1] = slow.next;
+                   resultNode[2] = resultNode[1].next;
+                   slow.next = null; // break first half;
+                   resultNode[1].next = null; // break middle
+                   fast = null;
+               }else{
+                   slow = slow.next;
+                   fast = fast.next.next;
+               }
+           }
+       }
+       return resultNode;
+   }
 }
