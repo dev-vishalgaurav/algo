@@ -1093,6 +1093,44 @@ public class Solution {
         }
         return result;
     }
+	/**
+ * Given an array of integers, find out whether there are two distinct indices i and j in the array 
+ * such that the difference between nums[i] and nums[j] is at most t and the difference between i and j 
+ * is at most k.
+ * 1 2 
+ * 0 1 
+ */
+ public boolean containsNearbyAlmostDuplicate(int[] nums, int k, int t) {
+     boolean result = false;
+     HashMap<Integer,Integer> map = new HashMap<Integer,Integer>();
+     for (int count = 0; count < nums.length; count++) {
+         result = containsWithInRange(nums, count, k, map, t);
+         if(result){
+             break;
+         }else{
+             map.put(nums[count], count);
+         }
+     }
+     return result;
+    }
+ public boolean containsWithInRange(int[] nums,int count, int range, Map<Integer, Integer> map, int diff){
+     boolean result = false;
+     int number = nums[count];
+     int from = number - range;
+     int to = number + range ;
+     while(from <= to){
+         if(from != number && map.containsKey(from)){
+             int index = map.get(from);
+             if(count - index <= diff){
+                 result = true;
+                 break;
+             }
+         }
+         from++;
+     }
+     return result;
+ }
+
 /**
  * Leetcode search for a range problem.
  * First it search element using binary search. if it finds it then it finds for lower bound and upper bound using binary search concept. 
