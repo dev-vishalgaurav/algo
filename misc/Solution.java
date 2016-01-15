@@ -113,4 +113,38 @@ public class Solution {
        }
        return resultNode;
    }
+/*
+ * 
+ * An edit between two strings is one of the following changes.
+ * Add a character
+ * Delete a character
+ * Change a character
+ * Given two string s1 and s2, find if s1 can be converted to s2 with exactly one edit. 
+ * Expected time complexity is O(m+n) where m and n are lengths of two strings
+ * #GeeksforGeeks
+ * Link - http://www.geeksforgeeks.org/check-if-two-given-strings-are-at-edit-distance-one/
+ */
+    public boolean isEditDistanceOne(String first, String second) {
+        boolean result = false;
+        char[] firstC = first.toCharArray();
+        char[] secondC = second.toCharArray();
+        int diff = Math.abs(firstC.length - secondC.length);
+        if (diff <= 1) {
+            int totalEdits = 0;
+            for(int count = 0 ; (totalEdits <= 1 && (count < firstC.length || count < secondC.length)); count++ ){
+                if (count < firstC.length && count < secondC.length) {
+                    if (firstC[count] != secondC[count]) {
+                        totalEdits++;
+                    }
+                } else {
+                    totalEdits++;
+                }
+            }
+            result = totalEdits == 1 ;
+            System.out.println(totalEdits);
+        } else {
+            result = false;
+        }
+        return result;
+    }
 }

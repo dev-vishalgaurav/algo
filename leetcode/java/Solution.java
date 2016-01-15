@@ -1267,5 +1267,1123 @@ public class Solution {
         }
         return lastVersion;
     }
+/**
+ * Leetcode search insert problem in a sorted array. It should return index if element is present else in order insertion index.
+ * Note : Idea is to do binary search while the low and high index condition is true if its found it will give index else mid value will be at a position
+ * where the target should have been located.
+ * Given a sorted array and a target value, return the index if the target is found. If not, return the index where it would be if it were inserted in order.
+ * You may assume no duplicates in the array.
+ * Here are few examples.
+ * [1,3,5,6], 5 → 2
+ * [1,3,5,6], 2 → 1
+ * [1,3,5,6], 7 → 4
+ * [1,3,5,6], 0 → 0
+ * https://leetcode.com/problems/search-insert-position/ 
+ */
+    public int searchInsert(int[] nums, int target) {
+        int index = -1;
+        int mid = -1;
+        int high = nums.length - 1 ;
+        int low = 0 ;
+        while(low <= high){
+            mid = low + (high - low)/2;
+            if(nums[mid] == target){
+                index = mid;
+                break;
+            }else if(nums[mid] < target ){
+                low = mid + 1;
+            }else{
+                high = mid - 1 ;
+            }
+        }
+        if(index == -1){
+            index = (nums[mid] < target) ? mid + 1 : mid;
+        }
+        return index;
+    }
 
+
+/**
+ * If arrays contains duplicates then it is not possible to binary search.
+ * Follow up for "Search in Rotated Sorted Array":
+ * What if duplicates are allowed?
+ * Would this affect the run-time complexity? How and why?
+ * Write a function to determine if a given target is in the array.
+ * https://leetcode.com/problems/search-in-rotated-sorted-array-ii/
+*/
+ public boolean searchII(int[] nums, int target) {
+        boolean result = false;
+        for(int i = 0 ; i < nums.length ; i++ ){
+            if(nums[i] == target){
+                result = true;
+                break;
+            }
+        }
+        return result;
+    }
+/**
+ * Leetcode myPow problem in java.
+ * this method uses the concept of recursion and the fact that X^n = X^n/2 * X^n/2
+ * https://leetcode.com/problems/powx-n/
+ * @param x 
+ *          number 
+ * @param n
+ *          power
+ * @return 
+ *         value 
+ */
+    public double myPow(double x, int n) {
+        double result = 0 ;
+        if (!(x == 0 && n == 0)) {
+            if(n == 0 || x ==1 ){
+                result = 1;
+            }else if( x == -1){
+                result = (n % 2 == 1 ) ? -1 : 1; 
+            }else if(n < 0){
+                result = 1 / myPow(x, -n);
+            }else{
+                double half = myPow(x, n/2);
+                double remainderPower = (n%2 == 1 ) ? x : 1;
+                result = half*half*remainderPower;
+            }
+        }
+        return  result ;
+    }
+/**
+* Given an unsorted array of integers, find the length of longest increasing subsequence.
+* For example,
+* Given [10, 9, 2, 5, 3, 7, 101, 18],
+* The longest increasing subsequence is [2, 3, 7, 101], therefore the length is 4. 
+* Note that there may be more than one LIS combination, it is only necessary for you to return the length.
+* Your algorithm should run in O(n2) complexity.
+*https://leetcode.com/problems/longest-increasing-subsequence/
+*/
+	public int lengthOfLIS(int[] nums) {
+        int max = 0 ;
+        if(nums.length > 0){
+            max = 1;
+            int[] dparr = new int[nums.length];// array to cache tabulated values (DP)
+            for(int i = 0 ; i < dparr.length ; i++){
+                dparr[i] = 1; // max commmon subsequence for each element is 1
+            }
+            for(int i = 1 ; i < nums.length ; i++){
+                for(int j = 0 ; j < i ; j++){
+                    if(nums[i] > nums[j]  && dparr[j] + 1 > dparr[i]){
+                        dparr[i] = dparr[j] + 1;
+                        max = max < dparr[i] ? dparr[i] : max ;
+                    }    
+                }
+            }
+        }
+        return max;
+    }
+/**
+* with nlogn implementation 
+*/
+	public int lengthOfLISNlogN(int[] nums) {
+        int max = 0 ;
+        if(nums.length > 0){
+            int[] temp = new int[nums.length];
+            int currentLength = 0 ;
+            for(int i = 1 ; i < nums.length ; i++){
+                if(nums[i] > nums[temp[currentLength]]){
+                    // extend the list
+                    currentLength++;
+                    temp[currentLength] = i ;
+                }else if(nums[i] < nums[temp[0]]){
+                    // replace the shortest
+                    temp[0] = i;
+                }else if(nums[i] > nums[temp[0]] && nums[i] < nums[temp[currentLength]]){ // for equalto condition
+                    // is in between .. need to do binarSearch for ceil value
+                    int replaceIndex = getIndex(nums,temp,nums[i],currentLength);
+                    temp[replaceIndex] = i;
+                }
+            }
+            max = currentLength + 1;
+        }
+        return max;
+    }
+    
+    private int getIndex(int[] nums, int[] temp, int forValue, int currLength){
+        int high = currLength;
+        int low = 0;
+        int mid  = -1;
+        int result = -1;
+        while(low <= high){
+           mid =  low + (high - low)/2; 
+           if(forValue == nums[temp[mid]]){ // handles duplicate entries
+               result = mid;
+               break;
+           }else if(mid < currLength && nums[temp[mid]] < forValue && nums[temp[mid+1]] >= forValue ){
+               result = mid + 1;
+               break;
+           }else if(nums[temp[mid]] > forValue){
+               high = mid - 1 ; 
+           }else{
+               low = mid + 1;
+           }
+        }
+        return result;
+    }
+/**
+* You are climbing a stair case. It takes n steps to reach to the top.
+* Each time you can either climb 1 or 2 steps. In how many distinct ways can you climb to the top?
+* Leetcode climbStairs problem
+* https://leetcode.com/problems/climbing-stairs/
+*/
+	public int climbStairs(int n) {
+        int total = (n == 1) ? 1 : 0 ;
+        if(n>1){      
+            int[] dpArray = new int[n+1];
+            dpArray[1] = 1;
+            dpArray[2] = 2;
+            for(int i = 3 ; i <= n ; i++){
+                dpArray[i] = dpArray[i-1] + dpArray[i-2];
+            } 
+            total = dpArray[n];
+         }
+        return total;
+    }
+/**
+* Follow up for "Remove Duplicates":
+* What if duplicates are allowed at most twice?
+* For example,
+* Given sorted array nums = [1,1,1,2,2,3],
+* Your function should return length = 5, with the first five elements of nums being 1, 1, 2, 2 and 3. It doesn't matter what you leave beyond the new length.
+* https://leetcode.com/problems/remove-duplicates-from-sorted-array-ii/
+*/
+	public int removeDuplicates(int[] nums) {
+        int total = 0 ;
+        if(nums.length > 0){
+            int currentItem = nums[0];
+            int currentCount = 1 ;
+            int nextIndex = 1;
+            total = 1;
+            for(int i = 1 ; i < nums.length ; i++){
+                if(nums[i] == currentItem){
+                    if(currentCount < 2){
+                        nums[nextIndex] = nums[i];
+                        nextIndex++;
+                        total++;
+                        currentCount++;
+                    }
+                }else{
+                    nums[nextIndex] = nums[i];
+                    nextIndex++;
+                    total++;
+                    currentItem = nums[i];
+                    currentCount = 1;
+                }
+            }
+        }
+        return total;
+    }
+/*
+* Given an array of integers, find two numbers such that they add up to a specific target number.
+* The function twoSum should return indices of the two numbers such that they add up to the target, where index1 must be less than index2. Please note that your returned answers (both index1 and index2) are not zero-based.
+* You may assume that each input would have exactly one solution.
+* Input: numbers={2, 7, 11, 15}, target=9
+* Output: index1=1, index2=2
+* https://leetcode.com/problems/two-sum/
+*/
+	public int[] twoSum(int[] nums, int target) {
+        HashMap<Integer,ArrayList<Integer>> map = new HashMap<Integer,ArrayList<Integer>>();
+        int[] result = new int[2];
+        for(int i = 0 ; i < nums.length ; i++){
+            int firstValue = nums[i];
+            put(map,firstValue,i);
+            int secondValue = target - nums[i];
+            if(map.containsKey(secondValue)){
+                if(firstValue == secondValue){
+                    int[] sameResult = getSameIndex(map,firstValue);
+                    if(sameResult.length > 1){
+                     result = sameResult;
+                     break;
+                    }
+                }else if(map.containsKey(secondValue)){
+                    result = getFormattedResult(i,getFirstIndex(map,secondValue));
+                    break;
+                }
+                
+            }
+        }
+        return result;
+    }
+    
+    private int[] getFormattedResult(int firstIndex, int secondIndex){
+        int[] result = new int[2];
+        if(firstIndex < secondIndex){
+            result[0] = firstIndex+1;
+            result[1] = secondIndex+1;
+        }else{
+            result[0] = secondIndex+1;
+            result[1] = firstIndex+1;
+        }
+        return result;
+    }
+    private int getFirstIndex(HashMap<Integer,ArrayList<Integer>> map, int value){
+        return map.get(value).get(0);
+    }
+    private int[] getSameIndex(HashMap<Integer,ArrayList<Integer>> map, int value){
+         ArrayList<Integer> list = map.get(value);
+         int[] result = new int[list.size()];
+         for(int i = 0 ; i < list.size() ; i++){
+             result[i] = list.get(i) + 1;
+         }
+         return result;
+    }
+    private void put(HashMap<Integer,ArrayList<Integer>> map , int number, int index){
+        ArrayList<Integer> list = map.containsKey(number) ? map.get(number) : new ArrayList<Integer>() ;
+        list.add(index);
+        map.put(number,list);
+    }
+/**
+* Given two binary trees, write a function to check if they are equal or not.
+* Two binary trees are considered equal if they are structurally identical and the nodes have the same value.
+* https://leetcode.com/problems/same-tree/
+*/
+	public boolean isSameTree(TreeNode p, TreeNode q) {
+        if((p==null && q==null)){
+            return true;
+        }else{
+            return (p != null && q != null) &&
+                   isSameTree(p.left,q.left) && 
+                   p.val == q.val &&
+                   isSameTree(p.right,q.right) ;
+        }
+    }
+/**
+* Given a binary search tree, write a function kthSmallest to find the kth smallest element in it.
+* Note: 
+* You may assume k is always valid, 1 ≤ k ≤ BST's total elements.
+* https://leetcode.com/problems/kth-smallest-element-in-a-bst/
+*/
+	public int kthSmallestNaive(TreeNode root, int k) {
+			ArrayList<Integer> list = new ArrayList<Integer>();
+			getInOrderTraversal(root,list);
+			return (list.get(k-1));
+		}
+		
+	public void getInOrderTraversal(TreeNode rootNode, List<Integer> list) {
+		if (rootNode != null && list != null) {
+			getInOrderTraversal(rootNode.left, list);
+			list.add(rootNode.val);
+			getInOrderTraversal(rootNode.right, list);
+		}
+	}
+/**
+* Given a binary tree, return the inorder traversal of its nodes' values.
+* https://leetcode.com/problems/binary-tree-inorder-traversal/
+*/
+	public List<Integer> inorderTraversal(TreeNode root) {
+        ArrayList<Integer> list = new ArrayList<Integer>();
+        getInOrderTraversal(root,list);
+        return list;
+    }
+/**
+* Given a binary tree, determine if it is a valid binary search tree (BST).
+* Assume a BST is defined as follows:
+* The left subtree of a node contains only nodes with keys less than the node's key.
+* The right subtree of a node contains only nodes with keys greater than the node's key.
+* Both the left and right subtrees must also be binary search trees.
+*https://leetcode.com/problems/validate-binary-search-tree/
+*/
+	public boolean isValidBST(TreeNode root) {
+        return isBinarySearchTree(root,null,null);
+    }
+    public boolean isBinarySearchTree(TreeNode root, Integer min, Integer max){
+        boolean result = true;
+        if(root != null){
+          result = (min  == null ? true : root.val > min ) 
+                && (max==null ? true : root.val < max)
+                && isBinarySearchTree(root.right, new Integer(root.val), max) 
+                && isBinarySearchTree(root.left, min, new Integer(root.val));
+        }
+         return result;
+    }
+/**
+* Given a string containing just the characters '(', ')', '{', '}', '[' and ']', determine if the input string is valid.
+* The brackets must close in the correct order, "()" and "()[]{}" are all valid but "(]" and "([)]" are not.
+* https://leetcode.com/problems/valid-parentheses/
+*/
+	public boolean isValid(String s) {
+        boolean result = true;
+        char[] string = s.toCharArray();
+        Stack<Character> stack = new Stack<Character>();
+        for(int i = 0 ; i < string.length ; i++){
+             if(isOpener(string[i])){
+                stack.push(string[i]);
+            }else if (stack.isEmpty()){
+                result = false;
+                break;
+            }else if(isMatch(stack.peek(),string[i])){
+                    stack.pop();
+            }else{
+                result = false;
+                break;
+            }
+            result = stack.isEmpty();
+        }
+        return result;
+    }
+    private boolean isMatch(char open, char close){
+        boolean result = false;
+        switch (open){
+            case '{':
+                result = close == '}';
+            break;
+            case '(':
+                result = close == ')';
+            break;
+            case '[':
+                result = close == ']';
+            break;
+        }
+        return result;
+    }
+    private boolean isOpener(char test){
+        return test == '{' || test == '(' || test == '[';
+    }
+    private boolean isCloser(char test){
+        return test == '}' || test == ')' || test == ']';
+    }
+/**
+* Given a binary tree, return the level order traversal of its nodes' values. (ie, from left to right, level by level).
+* For example:
+* Given binary tree {3,9,20,#,#,15,7},
+*    3
+*   / \
+*  9  20
+*    /  \
+*   15   7
+* return its level order traversal as:
+* [
+*  [3],
+*  [9,20],
+*  [15,7]
+* ]
+* https://leetcode.com/problems/binary-tree-level-order-traversal/
+*/
+	public List<List<Integer>> levelOrder(TreeNode root) {
+        List<List<Integer>> result = new ArrayList<List<Integer>>();
+        if(root!=null){
+            ArrayList<TreeNode> queue = new ArrayList<TreeNode>();
+            ArrayList<TreeNode> temp = new ArrayList<TreeNode>();
+            queue.add(root);
+            while(!queue.isEmpty()){
+                List<Integer> level = new ArrayList<Integer>();
+                while(!queue.isEmpty()){
+                    TreeNode node = queue.remove(0);
+                    level.add(node.val);
+                    if(node.left!=null){
+                        temp.add(node.left);
+                    }
+                    if(node.right!=null){
+                        temp.add(node.right);
+                    }
+                }
+                queue.addAll(temp);
+                temp.clear();
+                result.add(level);
+            }
+        }
+        return result;
+    }
+	public List<List<Integer>> levelOrder(TreeNode root) {
+        List<List<Integer>> result = new ArrayList<List<Integer>>();
+        if(root != null){
+            levelOrderUtil(root,result,1);
+        }
+        return result;
+    }
+    
+    private void levelOrderUtil(TreeNode root, List<List<Integer>> result, int depth  ){
+        if(root != null){
+            if(result.size() == depth - 1){
+                List<Integer> row = new ArrayList<Integer>();
+                row.add(root.val);
+                result.add(row);
+            }else{
+                List<Integer> row = result.get(depth - 1);
+                row.add(root.val);
+            }
+            levelOrderUtil(root.left,result,depth + 1);
+            levelOrderUtil(root.right,result,depth + 1);
+        }
+        
+    }
+/**
+* Given two strings s and t, write a function to determine if t is an anagram of s.
+* For example,
+* s = "anagram", t = "nagaram", return true.
+* s = "rat", t = "car", return false.
+* Note:
+* You may assume the string contains only lowercase alphabets.
+* https://leetcode.com/problems/valid-anagram/
+*/
+	public boolean isAnagram(String s, String t) {
+        char[] cs = s.toCharArray();
+        char[] ct = t.toCharArray();
+        boolean result = ct.length == cs.length;
+        if(result){
+           char[] maps = new char[26];
+           char[] mapt = new char[26];
+           for(int i = 0 ; i < cs.length ; i++){
+               maps[cs[i] - 'a']++;
+               mapt[ct[i] - 'a']++;
+           }
+           for(int i = 0 ; i < maps.length ; i++){
+               if(maps[i]!= mapt[i]){
+                   result = false;
+                   break;
+               }
+           }
+        }
+        return result;
+    }
+/**
+* Given an array of integers that is already sorted in ascending order, find two numbers such that they add up to a specific target number.
+* The function twoSum should return indices of the two numbers such that they add up to the target, where index1 must be less than index2. Please note that your returned answers (both index1 and index2) are not zero-based.
+* You may assume that each input would have exactly one solution.
+* Input: numbers={2, 7, 11, 15}, target=9
+* Output: index1=1, index2=2
+* https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/
+*/
+	public int[] twoSumSorted(int[] numbers, int target) {
+        int low = 0 ;
+        int high = numbers.length - 1;
+        int[] result = new int[2];
+        while(low <= high){
+            int sum = numbers[low] + numbers[high];
+            if(sum == target){
+                result[0] = low + 1;
+                result[1] = high + 1;
+                break;
+            }else if(sum > target){
+                high--;
+            }else{
+                low++;
+            }
+        }
+        return result;
+    }
+/**
+* Design a stack that supports push, pop, top, and retrieving the minimum element in constant time.
+* push(x) -- Push element x onto stack.
+* pop() -- Removes the element on top of the stack.
+* top() -- Get the top element.
+* getMin() -- Retrieve the minimum element in the stack.
+* https://leetcode.com/problems/min-stack/
+*/
+	class MinStack {
+		private ArrayList<Integer> stack = new ArrayList<Integer>();
+		private ArrayList<Integer> minStack = new ArrayList<Integer>();
+
+		public void push(int x) {
+			stack.add(x);
+			minStack.add((stack.size() == 1 ? x : (x < minStack.get(minStack.size() - 1) ? x : minStack.get(minStack.size() - 1) )  ));
+		}
+
+		public void pop() {
+			if(stack.size()>0){
+				stack.remove(stack.size()-1);
+				minStack.remove(minStack.size()-1);
+			}
+		}
+
+		public int top() {
+			return stack.get(stack.size() - 1);
+		   
+		}
+
+		public int getMin() {
+			return minStack.get(minStack.size() - 1);
+		}
+	}
+	class MinStack {
+		// internal Node class definition for linked list
+		class Node{
+			int val;
+			int min;
+			Node next;
+			
+			Node(int val, int min, Node next){
+				this.val = val;
+				this.min = min;
+				this.next = next;
+			}
+		}
+		private Node head = null; 
+		
+		public void push(int x) {
+			int min = (head == null)  ? x : (head.min > x)  ? x : head.min ;
+			Node top = new Node(x,min,head);
+			head = top;
+		}
+
+		public void pop() {
+			if(head!=null){
+				head = head.next;
+			}
+		}
+
+		public int top() {
+			return head.val;
+		}
+
+		public int getMin() {
+			return head.min;
+		}
+	}
+/**
+* You are given an n x n 2D matrix representing an image.
+* Rotate the image by 90 degrees (clockwise).
+* Follow up:
+* Could you do this in-place?
+* https://leetcode.com/problems/rotate-image/
+*/
+	public void rotate(int[][] matrix) {
+		int length = matrix[0].length - 1;
+		int upto = length/2;
+
+		for(int x = 0 ; x <= upto ; x ++){
+			int yRange = length - x;
+			for(int y = x ; y < yRange ; y++){
+				transformPoint(x,y,matrix,length);
+			}
+		}
+        
+    }
+    
+   private void transformPoint(int x, int y, int[][] matrix, int length){
+        int[] topLeft = {x,y};
+        int[] topRight = new int[2];
+        getTransformXY(topLeft[0],topLeft[1],topRight,length);
+        int[] bottomRight = new int[2];
+        getTransformXY(topRight[0],topRight[1],bottomRight,length);
+        int[] bottomLeft = new int[2];
+        getTransformXY(bottomRight[0],bottomRight[1],bottomLeft,length);
+        int topLeftV = matrix[topLeft[0]][topLeft[1]];
+        int topRightV = matrix[topRight[0]][topRight[1]];
+        int bottomLeftV= matrix[bottomLeft[0]][bottomLeft[1]];
+        int bottomRightV = matrix[bottomRight[0]][bottomRight[1]];
+        matrix[topLeft[0]][topLeft[1]] = bottomLeftV;
+        matrix[topRight[0]][topRight[1]] = topLeftV;
+        matrix[bottomLeft[0]][bottomLeft[1]] = bottomRightV;
+        matrix[bottomRight[0]][bottomRight[1]] = topRightV;
+    }
+            /*
+        * Formula x , y = y , (length - x )
+         */
+    private void getTransformXY(int x , int y, int[] cord, int length){
+        cord[0] = y ;
+        cord[1] = length - x ;
+        
+    }
+/**
+* Merge two sorted linked lists and return it as a new list. The new list should be made by splicing together the nodes of the first two lists.
+* https://leetcode.com/problems/merge-two-sorted-lists/ 
+*/
+	public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+        ListNode tail = null;
+        ListNode head = null;
+        while(l1!=null || l2!=null){
+            ListNode nextNode = null;
+            if(l1!=null && l2!=null){
+                if(l1.val <= l2.val){
+                    nextNode = l1;
+                    l1 = l1.next;
+                }else{
+                    nextNode = l2;
+                    l2 = l2.next;
+                }
+            }else if(l1 == null){
+                nextNode = l2;
+                l2 = l2.next;
+            }else{
+                nextNode = l1;
+                l1 = l1.next;
+            }
+            if(head == null){
+                tail = nextNode; 
+                head = tail;
+            }else{
+                tail.next = nextNode;
+                tail = tail.next;
+            }
+        }
+        
+     return head;   
+    }
+/**
+* 
+* Write a program to find the node at which the intersection of two singly linked lists begins.
+* For example, the following two linked lists:
+* A:          a1 → a2
+*                    ↘
+*                      c1 → c2 → c3
+*                    ↗            
+* B:     b1 → b2 → b3
+* begin to intersect at node c1.
+* Notes:
+* If the two linked lists have no intersection at all, return null.
+* The linked lists must retain their original structure after the function returns.
+* You may assume there are no cycles anywhere in the entire linked structure.
+* Your code should preferably run in O(n) time and use only O(1) memory.
+* https://leetcode.com/problems/intersection-of-two-linked-lists/
+*/
+	public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+		ListNode result = null;
+		if(headA != null && headB != null){
+			if(headA!=headB){
+				ListNode lastA = getLast(headA);
+				lastA.next = headB;
+				ListNode[] cycleNodes = getCycle(headA);
+				if(cycleNodes!=null){
+					result = getIntersection(headA,cycleNodes[1]);
+				}
+				lastA.next = null;
+			}else{
+				result = headA;
+			}
+		}
+		return result;
+    }
+    
+    public ListNode getIntersection(ListNode head, ListNode fast){
+        while(head!=fast){
+            head = head.next;
+            fast = fast.next;
+        }
+        return head;
+    }
+    
+    public ListNode getLast(ListNode head){
+        ListNode last = head;
+        while(last.next!=null){
+            last = last.next;
+        }
+        return last;
+    }
+    public ListNode[] getCycle(ListNode head){
+        ListNode fast = head;
+        ListNode slow = head;
+        ListNode[] result = null;
+        while(fast!=null){
+            fast = fast.next;
+            if(fast!=null){
+                slow = slow.next;
+                fast = fast.next;
+            }
+            if(fast == slow){
+                result = new ListNode[2];
+                result[0] = result[1] = fast;
+                break;
+            }
+        }
+        return result;
+        
+    }
+/**
+* Given an input string, reverse the string word by word. A word is defined as a sequence of non-space characters.
+* The input string does not contain leading or trailing spaces and the words are always separated by a single space.
+* For example,
+* Given s = "the sky is blue",
+* return "blue is sky the".
+* Could you do it in-place without allocating extra space?
+* https://leetcode.com/problems/reverse-words-in-a-string-ii/
+*/
+	public void reverseWords(char[] s) {
+        char[] copy = Arrays.copyOf(s,s.length);
+        int currentIndex = 0;
+        int length = s.length - 1;
+        while(currentIndex < s.length){
+            int startIndex = currentIndex;
+            int stride = getNext(currentIndex,copy);
+            // set copy[start] -> copy[end] = 
+            int start = length - (currentIndex + stride - 1);
+            int end = length - currentIndex;
+            for(int i = start ; i <= end ; i++ ){
+                s[i] = copy[currentIndex];
+                currentIndex++;
+            }
+            if(start-1>0){
+                s[start-1] = ' ';
+            }
+            currentIndex = startIndex + stride + 1 ;
+        }
+    }
+    
+    private int getNext(int current,char[] string){
+        int count = 0 ;
+        while(current < string.length && string[current] != ' ' ){
+            current++;
+            count++;
+        }
+        return count;
+    }
+/**
+* Given a binary search tree (BST), find the lowest common ancestor (LCA) of two given nodes in the BST.
+* According to the definition of LCA on Wikipedia: 
+* “The lowest common ancestor is defined between two nodes v and w as the lowest node in T that has both v and w as 
+* descendants (where we allow a node to be a descendant of itself).”
+*       _______6______
+*      /              \
+*   ___2__          ___8__
+*  /      \        /      \
+* 0      _4       7       9
+*       /  \
+         3   5
+* For example, the lowest common ancestor (LCA) of nodes 2 and 8 is 6. Another example is LCA of nodes 2 and 4 is 2, 
+* since a node can be a descendant of itself according to the LCA definition.
+* https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/
+*/
+	public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        TreeNode result = null;
+        if(root != null && p != null && q != null){
+            if( p.val > root.val && q.val > root.val ){
+                result = lowestCommonAncestor(root.right,p,q);
+            }else if(p.val < root.val && q.val < root.val){
+                result  = lowestCommonAncestor(root.left,p,q);
+            }else{
+                result = root;
+            }
+        }
+        return result;
+    }
+/**
+* Given an array of strings, group anagrams together.
+* For example, given: ["eat", "tea", "tan", "ate", "nat", "bat"], 
+* Return:
+
+* [
+*  ["ate", "eat","tea"],
+*  ["nat","tan"],
+*  ["bat"]
+ ]
+* Note:
+* For the return value, each inner list's elements must follow the lexicographic order.
+* All inputs will be in lower-case.
+* https://leetcode.com/problems/anagrams/
+*/
+	public List<List<String>> groupAnagrams(String[] strs) {
+        HashMap<String,List<String>> map = new HashMap<String, List<String>>();
+        List<List<String>> result = new ArrayList<>();
+        for(String each : strs){
+            String ordered = getOrdered(each);
+            if(map.containsKey(ordered)){
+                List<String> list = map.get(ordered);
+                list.add(each);
+            }else{
+                List<String> list = new ArrayList<>();
+                list.add(each);
+                map.put(ordered, list);
+            }
+        }
+        Set<Map.Entry<String,List<String>>> entries = map.entrySet();
+        for (Map.Entry<String, List<String>> entry : entries) {
+            List<String> row = entry.getValue();
+            Collections.sort(row);
+            result.add(row);
+        }
+        return result;
+    }
+    
+    private String getOrdered(String word){
+        char[] string = word.toCharArray();
+        int[] counts = new int[26];
+        for(char letter : string){
+            counts[letter - 'a']++;
+        }
+        char[] ordered = new char[string.length];
+        int orderCount = 0;
+        for(int i = 0 ; i < counts.length ; i++){
+            for(int j = 0; j < counts[i] ; j++){
+                ordered[orderCount] = (char) ('a' + i);
+                orderCount++;
+            }
+        }
+        return new String(ordered);
+    }
+/**
+* Given a binary search tree and a node in it, find the in-order successor of that node in the BST.
+* Note: If the given node has no in-order successor in the tree, return null.
+* https://leetcode.com/problems/inorder-successor-in-bst/
+*/
+	public TreeNode inorderSuccessor(TreeNode root, TreeNode p) {
+        TreeNode result = null;
+        TreeNode currentNode = find(root,p);
+        if(currentNode!=null){
+            if(currentNode.right!=null){
+                result = findMin(currentNode.right);
+            }else{
+                
+                result = getDeepestLeftAncestor(root,currentNode);
+            }
+        }
+        return result;
+    }
+    private TreeNode getDeepestLeftAncestor(TreeNode root, TreeNode current){
+        TreeNode result = null;
+        TreeNode prev = null;
+        TreeNode next = root;
+        while(next.val != current.val){
+            if(current.val < next.val){
+                prev = next;
+                next = next.left;
+            }else{
+                next = next.right;
+            }
+        }
+        result = prev;
+        return result;
+    }
+    private TreeNode findMin(TreeNode root){
+        TreeNode result = root;
+        while(root.left!=null){
+            result = root.left;
+            root = root.left;
+        }
+        return result;
+    }
+    private TreeNode find(TreeNode root, TreeNode p){
+        TreeNode result = null;
+        if(root != null && p != null){
+            if(root.val == p.val){
+                result = root;
+            }else if(p.val < root.val ){
+                result = find(root.left,p);
+            }else{
+                result = find(root.right,p);
+            }
+        }
+        return result;
+    }
+/**
+* Given a string, determine if it is a palindrome, considering only alphanumeric characters and ignoring cases.
+* For example,
+* "A man, a plan, a canal: Panama" is a palindrome.
+* "race a car" is not a palindrome.
+* Note:
+* Have you consider that the string might be empty? This is a good question to ask during an interview.
+* For the purpose of this problem, we define empty string as valid palindrome.
+* https://leetcode.com/problems/valid-palindrome/
+*/
+   public boolean isPalindrome(String s) {
+       boolean result = true;
+       if(s.length() > 0 ){
+           char[] originalChars = s.toCharArray();
+           int end = originalChars.length - 1;
+           int start = 0 ;
+           while(start < end && result){
+               if(isAlphaNumeric(originalChars[start]) && isAlphaNumeric(originalChars[end])){
+                   result = result & equalsIgnoreCase(originalChars[start],originalChars[end]);
+                   start++;
+                   end--;
+               }else if(!isAlphaNumeric(originalChars[start])){
+                   start++;
+               }else if(!isAlphaNumeric(originalChars[end])){
+                   end--;
+               }
+           }
+       }
+       return result;
+   }
+
+    public boolean isPalindromeNaive(String s) {
+        boolean result = true;
+        if(s.length() > 0 ){
+            List<Character> validCharList = new ArrayList<>();
+            char[] originalChars = s.toCharArray();
+            for(int i = 0 ; i < originalChars.length ; i++){
+                if(isAlphaNumeric(originalChars[i])){
+                    validCharList.add(originalChars[i]);
+                }
+            }
+            int end = validCharList.size() - 1;
+            int start = 0 ;
+            while(start < end && result){
+                result = equalsIgnoreCase(validCharList.get(start),validCharList.get(end));
+                start++;
+                end--;
+            }
+        }
+        return result;
+    }
+
+    private boolean isAlphaNumeric(char c){
+        return isSmallLetter(c) || isCapsLetter(c) ||isNumeric(c);
+    }
+    private boolean isSmallLetter(char c){
+        return (c >= 'a' && c <='z') ;
+    }
+    private boolean isCapsLetter(char c){
+        return (c >= 'A' && c <='Z') ;
+    }
+    private boolean isNumeric(char c){
+        return  (c >= '0' && c <='9') ;
+    }
+    
+    private int getLetterIndex(char c){
+        int result = -1 ;
+        if(isSmallLetter(c)){
+            result = c - 'a';
+        }else{
+            result = c - 'A';
+        }
+        return result;
+    }
+    
+    private boolean equalsIgnoreCase(char c1, char c2){
+        boolean result = false;
+        if(isNumeric(c1) || isNumeric(c2)){
+            result = c1 == c2;
+        }else{
+            int indexC1 = getLetterIndex(c1);
+            int indexC2 = getLetterIndex(c2);
+            result = indexC1 == indexC2;
+        }
+        return result;
+    }
+/**
+* Implement strStr().
+* Returns the index of the first occurrence of needle in haystack, or -1 if needle is not part of haystack.
+* https://leetcode.com/problems/implement-strstr/
+*/
+	public int strStr(String haystack, String needle) {
+        int startIndex = -1;
+        if(!haystack.isEmpty() || !needle.isEmpty()){
+            char[] main = haystack.toCharArray();
+            char[] find = needle.toCharArray();
+            int start = 0 ;
+            int end = (main.length  - find.length);
+            while(start <= end){
+                if(isFound(start,main,find)){
+                    startIndex = start;
+                    break;
+                }
+                start++;
+            }
+        }else{
+            startIndex = 0 ;
+        }
+        return startIndex;
+    }
+    
+    private boolean isFound(int start, char[] main, char[] find){
+        boolean result = true;
+        int count = 0 ;
+        while(count < find.length && result){
+            result = result & main[start] == find[count]; 
+            count++;
+            start++;
+        }
+        return result;
+    }
+/**
+* Given a binary tree, check whether it is a mirror of itself (ie, symmetric around its center).
+* For example, this binary tree is symmetric:
+* 
+*     1
+*    / \
+*   2   2
+*  / \ / \
+*  3  4 4  3
+* But the following is not:
+*    1
+*   / \
+*   2   2
+*    \   \
+*    3    3
+* https://leetcode.com/problems/symmetric-tree/
+*/
+	public boolean isSymmetric(TreeNode root) {
+        return root != null ? isSymmetric(root.left, root.right) : true ;
+    }
+    
+    private boolean isSymmetric(TreeNode left, TreeNode right){
+        return (left != null && right != null) ?  (left.val == right.val) && isSymmetric(left.left,right.right) && isSymmetric(left.right,right.left) :
+                            (left == null && right == null) ? true : false ;
+    }
+/**
+* Given a binary tree where all the right nodes are either leaf nodes with a sibling (a left node that shares the same parent node) or empty, 
+* flip it upside down and turn it into a tree where the original right nodes turned into left leaf nodes. Return the new root.
+* For example:
+* Given a binary tree {1,2,3,4,5},
+*     1
+*    / \
+*   2   3
+*  / \
+* 4   5
+* return the root of the binary tree [4,5,2,#,#,3,1].
+*    4
+*   / \
+*  5   2
+*     / \
+*    3   1  
+* https://leetcode.com/problems/binary-tree-upside-down/
+*/
+	public TreeNode upsideDownBinaryTreeNaive(TreeNode root) {
+        TreeNode head = null;
+        Stack<TreeNode> stack = new Stack<>();
+        while(root != null){
+            stack.push(root);
+            root = root.left;
+        }
+        while(!stack.isEmpty()){
+            TreeNode node = stack.pop();
+            if(head==null){
+                head = node;
+            }
+            if(!stack.isEmpty()){
+                TreeNode prev = stack.peek();
+                node.left = prev.right;
+                node.right = prev;
+            }else{
+                node.left = null ;
+                node.right = null;
+            }
+        }
+        
+        return head;
+    }
+/**
+* Implement an iterator over a binary search tree (BST). Your iterator will be initialized with the root node of a BST.
+* Calling next() will return the next smallest number in the BST.
+* Note: next() and hasNext() should run in average O(1) time and uses O(h) memory, where h is the height of the tree.
+* Your BSTIterator will be called like this:
+* BSTIterator i = new BSTIterator(root);
+* while (i.hasNext()) v[f()] = i.next();
+*/
+	class BSTIterator {
+    
+		private List<Integer> sorted = new ArrayList<Integer>();
+		int count = 0;
+		int max = 0 ;
+		public BSTIterator(TreeNode root) {
+			getInorder(sorted,root);
+			max = sorted.size();
+		}
+		private void getInorder(List<Integer> sorted, TreeNode root){
+			if(root!=null){
+				getInorder(sorted,root.left);
+				sorted.add(root.val);
+				getInorder(sorted,root.right);
+			}
+		}
+		/** @return whether we have a next smallest number */
+		public boolean hasNext() {
+			return count < max;
+		}
+
+		/** @return the next smallest number */
+		public int next() {
+			int result = -1;
+			if(hasNext()){
+				result = sorted.get(count);
+				count++;
+			}
+			return result;
+		}
+	}
 }
