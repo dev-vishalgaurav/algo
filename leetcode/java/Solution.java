@@ -2414,6 +2414,271 @@ public class Solution {
         return result;
     }
 /**
+* Write an efficient algorithm that searches for a value in an m x n matrix. This matrix has the following properties:
+* 
+* Integers in each row are sorted in ascending from left to right.
+* Integers in each column are sorted in ascending from top to bottom.
+*
+* For example,
+* Consider the following matrix:
+*
+* [
+*  [1,   4,  7, 11, 15],
+*  [2,   5,  8, 12, 19],
+*  [3,   6,  9, 16, 22],
+*  [10, 13, 14, 17, 24],
+*  [18, 21, 23, 26, 30]
+* ]
+* Given target = 5, return true.
+*
+* Given target = 20, return false.
+* https://leetcode.com/problems/search-a-2d-matrix-ii/
+*/
+    public boolean searchMatrixII(int[][] matrix, int target) {
+     boolean result = false;
+     if(matrix.length > 0){
+         int rows = matrix.length - 1;
+         int columns = matrix[0].length -1;
+         int i = 0 ;
+         int j = columns;
+         while(i <= rows && j >= 0){
+             int currentValue = matrix[i][j];
+             if(currentValue == target){
+                 result = true;
+                 break;
+             }else if(target > currentValue){
+                 i++;
+             }else{
+                 j--;
+             }
+         }
+     } 
+        return result;
+    }
+/**
+* Given a binary tree, flatten it to a linked list in-place.
+* For example,
+* Given
+*
+*         1
+*        / \
+*       2   5
+*      / \   \
+*     3   4   6
+* The flattened tree should look like:
+*   1
+*    \
+*     2
+*      \
+*       3
+*        \
+*         4
+*          \
+*           5
+*            \
+*             6
+* https://leetcode.com/problems/flatten-binary-tree-to-linked-list/
+* 
+*/
+	public void flattenNaive(TreeNode root) {
+        if(root != null){
+            List<TreeNode> list = new ArrayList<>();
+            getPreorder(root,list);
+            for(int i = 0 ; i < list.size(); i++){
+                if(i+1 < list.size()){
+                    TreeNode current = list.get(i);
+                    TreeNode next = list.get(i+1);
+                    current.left = null;
+                    current.right = next;
+                }
+            }
+        }
+    }
+    
+    private void getPreorder(TreeNode node, List<TreeNode> list){
+        if(node != null && list != null){
+            list.add(node);
+            getPreorder(node.left,list);
+            getPreorder(node.right,list);
+        }
+    }
+	
+	public void flatten(TreeNode root) {
+        if(root != null){
+            flattenRoot(root);
+        }
+    }
+	public TreeNode flattenRoot(TreeNode root){
+		TreeNode lastNode = root; 
+		TreeNode rightNode = root.right;
+		if(root.left != null){
+			root.right = root.left;
+			lastNode = flattenRoot(root.left);
+			root.left = null;
+		}
+		if(root.right != null){
+			lastNode.right = rightNode;
+			lastNode  = flattenRoot(root.right);
+		}
+		return lastNode;
+    }
+/**
+* Given a collection of distinct numbers, return all possible permutations.
+* For example,
+* [1,2,3] have the following permutations:
+* [1,2,3], [1,3,2], [2,1,3], [2,3,1], [3,1,2], and [3,2,1].
+*
+* https://leetcode.com/problems/permutations/
+*/
+	public List<List<Integer>> permute(int[] nums) {
+        List<List<Integer>> result = new ArrayList<List<Integer>>();
+        permute(nums,0,nums.length-1,result);
+        return result;
+    }
+    
+    private void permute(int[] nums, int start, int end, List<List<Integer>> result ){
+        if(start == end){
+            result.add(getList(nums));
+        }else{
+            for(int i = start ; i <= end ; i++){
+                swap(nums,start,i);
+                permute(nums,start+1,end,result);
+                swap(nums,start,i);
+            }
+        }
+    }
+    private void swap(int[] nums, int from, int to){
+        int temp = nums[from];
+        nums[from] = nums[to];
+        nums[to] = temp;
+    }
+    private List<Integer> getList(int[] nums){
+        List<Integer> list = new ArrayList<>();
+        for(int i = 0 ; i < nums.length ; i++){
+            list.add(nums[i]);
+        }
+        return list;
+    }
+/**
+* Implement next permutation, which rearranges numbers into the lexicographically next greater permutation of numbers.
+* If such arrangement is not possible, it must rearrange it as the lowest possible order (ie, sorted in ascending order).
+*
+* The replacement must be in-place, do not allocate extra memory.
+*
+* Here are some examples. Inputs are in the left-hand column and its corresponding outputs are in the right-hand column.
+* 1,2,3 → 1,3,2
+* 3,2,1 → 1,2,3
+* 1,1,5 → 1,5,1
+* Show Tags
+* Show Similar Problems
+* https://leetcode.com/problems/next-permutation/
+*/
+	public void nextPermutation(int[] nums) {
+        if(nums.length > 1){
+            boolean isSwapped = false;
+            for(int i = nums.length-1 ; i >= 0 ; i--){
+                if((i - 1) >= 0 && nums[i] > nums[i-1]){
+                    isSwapped = true;
+                    int index = getCorrectIndex(nums,i-1,i);
+                    swap(nums,index,i-1);
+                    Arrays.sort(nums,i,nums.length);
+                    break;
+                }
+            }
+            if(!isSwapped){
+                Arrays.sort(nums);
+            }
+        }
+
+    }
+    private int getCorrectIndex(int[] nums, int prevIndex, int currentIndex){
+        int start = currentIndex + 1;
+        int lowestIndex = currentIndex;
+        while(start < nums.length){
+            if(nums[start] > nums[prevIndex] && nums[start] < nums[currentIndex]){
+                lowestIndex = start;
+            }
+            start++;
+        }
+        return lowestIndex;
+    }
+    private void swap(int[] array, int from, int to){
+        int temp = array[from];
+        array[from] = array[to];
+        array[to] = temp;
+    }
+/**
+* Given a collection of numbers that might contain duplicates, return all possible unique permutations.
+* For example,
+* [1,1,2] have the following unique permutations:
+* [1,1,2], [1,2,1], and [2,1,1].
+* https://leetcode.com/problems/permutations-ii/
+*/
+	public List<List<Integer>> permuteUnique(int[] nums) {
+        List<List<Integer>> result = new ArrayList<List<Integer>>();
+        permuteUnique(nums,result, 0 , nums.length-1);
+        return result;
+    }
+    private void permuteUnique(int[] nums,List<List<Integer>> result, int start, int end ){
+        if(start == end){
+            result.add(getList(nums));
+        }else{
+            for(int i = start; i <= end ; i++){
+                if(!(i > start && isAlreadyCovered(nums,start,i))){
+                    swap(nums,i,start);
+                    permute(nums,result,start+1,end);
+                    swap(nums,i,start);
+                }
+            }
+        }
+    }
+    private boolean isAlreadyCovered(int[] nums, int start, int end){
+        boolean result = false;
+        for(int i = start ; i < end; i++){
+            if(nums[i] == nums[end]){
+                result = true;
+                break;
+            }
+        }
+        return result;
+    }
+/**
+* Compare two version numbers version1 and version2.
+* If version1 > version2 return 1, if version1 < version2 return -1, otherwise return 0.
+*
+* You may assume that the version strings are non-empty and contain only digits and the . character.
+* The . character does not represent a decimal point and is used to separate number sequences.
+* For instance, 2.5 is not "two and a half" or "half way to version three", it is the fifth second-level revision of the second first-level revision.
+*
+* Here is an example of version numbers ordering:
+*
+* 0.1 < 1.1 < 1.2 < 13.37
+* https://leetcode.com/problems/compare-version-numbers/
+*/
+	public int compareVersion(String version1, String version2) {
+        int result = 0 ;
+        String[] v1 = version1.split("\\.");
+        String[] v2 = version2.split("\\.");
+        int count = 0;
+        try{
+            while(count < v1.length || count < v2.length){
+                int comp1 = (count < v1.length) ? Integer.parseInt(v1[count]) : 0 ;
+                int comp2 = (count < v2.length) ? Integer.parseInt(v2[count]) : 0;
+                if(comp1 > comp2){
+                    result = 1;
+                    break;
+                }else if(comp1 < comp2){
+                    result = -1;
+                    break;
+                }
+                count++;
+            }
+        }catch(NumberFormatException ex){
+            
+        }
+        return result;
+    }
+/**
 * Implement an iterator over a binary search tree (BST). Your iterator will be initialized with the root node of a BST.
 * Calling next() will return the next smallest number in the BST.
 * Note: next() and hasNext() should run in average O(1) time and uses O(h) memory, where h is the height of the tree.
