@@ -1916,6 +1916,29 @@ public class Solution {
      return head;   
     }
 /**
+* Given a linked list, determine if it has a cycle in it.
+* Follow up:
+* Can you solve it without using extra space?
+* https://leetcode.com/problems/linked-list-cycle/
+*/
+	public boolean hasCycle(ListNode head) {
+        ListNode slow = head;
+        ListNode fast = head;
+        boolean result = false;
+        while(fast!=null){
+            fast = fast.next;
+            if(fast!=null){
+                fast = fast.next;
+                slow = slow.next;
+            } 
+            if(slow == fast){
+                result = true;
+                break;
+            }
+        }
+        return result;
+    }
+/**
 * 
 * Write a program to find the node at which the intersection of two singly linked lists begins.
 * For example, the following two linked lists:
@@ -2021,6 +2044,24 @@ public class Solution {
             count++;
         }
         return count;
+    }
+/**
+* Given an input string, reverse the string word by word.
+* For example,
+* Given s = "the sky is blue",
+* return "blue is sky the".
+* https://leetcode.com/problems/reverse-words-in-a-string/
+*/
+	public String reverseWords(String s) {
+        String[] result = s.trim().split(" ");
+        StringBuilder sb = new StringBuilder();
+        for(int i = result.length - 1 ; i >=0 ; i--){
+            if(!result[i].isEmpty()){
+             sb.append(result[i]);
+             sb.append(i == 0  ? "" :" " );
+            }
+        }
+        return sb.toString();
     }
 /**
 * Given a binary search tree (BST), find the lowest common ancestor (LCA) of two given nodes in the BST.
@@ -2677,6 +2718,504 @@ public class Solution {
             
         }
         return result;
+    }
+/**
+* Given a binary tree and a sum, determine if the tree has a root-to-leaf path such that adding up all the values along the path equals the given sum.
+* For example:
+* Given the below binary tree and sum = 22,
+*              5
+*             / \
+*            4   8
+*           /   / \
+*          11  13  4
+*         /  \      \
+*        7    2      1
+* return true, as there exist a root-to-leaf path 5->4->11->2 which sum is 22.
+* https://leetcode.com/problems/path-sum/
+*/
+	public boolean hasPathSum(TreeNode root, int sum) {
+       return (root == null) ? false : (root.left == null && root.right == null) ? sum - root.val == 0 : (hasPathSum(root.left, sum - root.val) || hasPathSum(root.right, sum - root.val));
+    }
+/**
+* Given a binary tree and a sum, find all root-to-leaf paths where each path's sum equals the given sum.
+* For example:
+* Given the below binary tree and sum = 22,
+*              5
+*             / \
+*            4   8
+*           /   / \
+*          11  13  4
+*         /  \    / \
+*        7    2  5   1
+* return
+* [
+*   [5,4,11,2],
+*   [5,8,4,5]
+* ]
+* https://leetcode.com/problems/path-sum-ii/
+*/
+	public List<List<Integer>> pathSum(TreeNode root, int sum) {
+        List<List<Integer>> result = new ArrayList<List<Integer>>();
+        pathSumUtil(root,sum,result,new ArrayList<Integer>());   
+        return result;
+    }
+    public void pathSumUtil(TreeNode root, int sum,List<List<Integer>> result,ArrayList<Integer> currentList ){
+        if(root != null){
+            if(root.left == null && root.right == null){
+                // leaf node
+                if(sum - root.val == 0){
+                    currentList.add(root.val);
+                    result.add((ArrayList<Integer>)currentList.clone()); // need to clone existing list.
+                    currentList.remove(currentList.size() - 1);
+                }
+            }else{
+                currentList.add(root.val); // add to current path.
+                int index = currentList.size() - 1; // store the index.
+                pathSumUtil(root.left,sum - root.val,result,currentList); 
+                pathSumUtil(root.right,sum - root.val,result,currentList); 
+                currentList.remove(index); // remove from current path.
+            }
+        }
+    }
+/**
+* Given a string S, find the longest palindromic substring in S. 
+* You may assume that the maximum length of S is 1000, and there exists one unique longest palindromic substring.
+* https://leetcode.com/problems/longest-palindromic-substring/
+*/
+    public String longestPalindrome(String s) {
+       String result = null;
+       int maxLength = 0;
+       int begin = -1;
+       if(s !=null && !s.isEmpty()){
+           boolean[][] table = new boolean[s.length()][s.length()];
+           char[] string = s.toCharArray();
+           maxLength = 1;
+           begin = 0 ;
+           for(int subLength = 1; subLength <= string.length ; subLength++){
+               int upto = string.length - subLength + 1;
+               for(int i = 0 ; i < upto ; i++){
+                   int length = subLength - 1;
+                   int j = i + length;
+                   switch (length){
+                       case 0:{
+                           table[i][j] = true; 
+                       }
+                       break;
+                       case 1:{
+                            if(i < string.length - 1 && string[i] == string[i+1]){
+                                table[i][j] = true;
+                                maxLength = subLength;
+                                begin = i;
+                            }
+                       }
+                       break;
+                       default:{
+                           if(string[i] == string[j] && table[i+1][j-1]){
+                               table[i][j] = true;
+                               maxLength = subLength;
+                               begin = i;
+                           }
+                       }
+                       break;
+                   }
+               }
+           }
+           result = s.substring(begin, begin + maxLength);
+       }
+       return result;
+    }
+/**
+* Given a string, determine if a permutation of the string could form a palindrome.
+* For example,
+* "code" -> False, "aab" -> True, "carerac" -> True.
+* https://leetcode.com/problems/palindrome-permutation/
+*/
+	public boolean canPermutePalindrome(String s) {
+        boolean result = false;
+        if(s!=null && !s.isEmpty()){
+            HashSet<Character> set = new HashSet<>();
+            char[] string = s.toCharArray();
+            int oddCount = 0;
+            for(int i = 0 ; i < string.length ; i++){
+                if(set.contains(string[i])){
+                    set.remove(string[i]);
+                }else{
+                    set.add(string[i]);
+                }
+            }
+            result = set.size() <= 1;
+            
+        }
+        return result;
+    }
+	
+	public boolean canPermutePalindromeV2(String s) {
+        boolean result = false;
+        if(s!=null && !s.isEmpty()){
+            int[] map = new int[256];
+            char[] string = s.toCharArray();
+            int oddCount = 0;
+            for(int i = 0 ; i < string.length ; i++){
+                map[string[i]]++;
+                oddCount = (map[string[i]] % 2 == 0) ? oddCount - 1: oddCount + 1 ;
+            }
+            result = oddCount <= 1;
+        }
+        return result;
+    }
+/**
+* Given an array where elements are sorted in ascending order, convert it to a height balanced BST.
+* https://leetcode.com/problems/convert-sorted-array-to-binary-search-tree/
+*/
+	public TreeNode sortedArrayToBST(int[] nums) {
+        return getNextNode(0,nums.length-1,nums);
+    }
+    
+    private TreeNode getNextNode(int start,int end, int[] nums){
+        TreeNode node = null;
+        if(start <= end){
+            int mid = start + (end - start)/2;
+            node = new TreeNode(nums[mid]);
+            node.left = getNextNode(start,mid-1,nums);
+            node.right = getNextNode(mid+1,end,nums);
+        }
+        return node;
+    }
+/**
+* Given a singly linked list where elements are sorted in ascending order, convert it to a height balanced BST.
+* https://leetcode.com/problems/convert-sorted-list-to-binary-search-tree/
+*/
+	public TreeNode sortedListToBST(ListNode head) {
+            List<Integer> list = getList(head);
+            return getNextNode(0,list.size()-1,list);
+    }
+    private TreeNode getNextNode(int start,int end, List<Integer> nums){
+        TreeNode node = null;
+        if(start <= end){
+            int mid = start + (end - start)/2;
+            node = new TreeNode(nums.get(mid));
+            node.left = getNextNode(start,mid-1,nums);
+            node.right = getNextNode(mid+1,end,nums);
+        }
+        return node;
+    }
+    private List<Integer> getList(ListNode head){
+       List<Integer> list = new ArrayList<Integer>();
+       while(head!=null){
+           list.add(head.val);
+           head = head.next;
+       }
+       return list;
+   }
+/**
+* Given a 2D board and a word, find if the word exists in the grid.
+* The word can be constructed from letters of sequentially adjacent cell, where "adjacent" cells are those horizontally or vertically neighboring. The same letter cell may not be used more than once.
+* For example,
+* Given board =
+* [
+*   ['A','B','C','E'],
+*   ['S','F','C','S'],
+*   ['A','D','E','E']
+* ]
+* word = "ABCCED", -> returns true,
+* word = "SEE", -> returns true,
+* word = "ABCB", -> returns false.
+* https://leetcode.com/problems/word-search/
+*/
+	public  boolean exist(char[][] board, String word) {
+			boolean result = false;
+			int length = board.length;
+			int width = board[0].length;
+			char[] wordChars = word.toCharArray();
+			boolean[][] visiting = new boolean[length][width];
+			outerloop:
+			for(int i = 0 ; i < length ; i++){
+				for(int j = 0 ; j < width ; j++  ){
+					if(board[i][j] == wordChars[0]){
+						result = doesWordExist(board,i, j , wordChars, 0,visiting);
+						if(result){
+							break outerloop;
+						}
+					}
+				}
+			}
+			return result;
+	}
+
+    private boolean doesWordExist(char[][] board, int i, int j,  char[] wordChars, int index,boolean[][] visiting ) {
+        boolean result = false ;
+        if(i >=0 && i < board.length && j >=0 && j < board[0].length && !visiting[i][j] ){
+        visiting[i][j] = true;
+        result = board[i][j] == wordChars[index];
+            if(result && (index + 1) < wordChars.length ){
+               int nextCharIndex = index + 1;
+               result = doesWordExist(board, i - 1 , j , wordChars, nextCharIndex, visiting) || 
+                        doesWordExist(board, i + 1, j, wordChars, nextCharIndex, visiting)  ||
+                        doesWordExist(board, i, j - 1, wordChars, nextCharIndex, visiting)  ||
+                        doesWordExist(board, i, j + 1, wordChars, nextCharIndex, visiting)  ;                
+            }
+         visiting[i][j] = false;
+        }
+        return result;
+    }
+/**
+* Given an integer n, generate a square matrix filled with elements from 1 to n2 in spiral order.
+* For example,
+* Given n = 3,
+*
+* You should return the following matrix:
+* [
+*  [ 1, 2, 3 ],
+*  [ 8, 9, 4 ],
+*  [ 7, 6, 5 ]
+* ]
+*https://leetcode.com/problems/spiral-matrix-ii/
+*/
+   public int[][] generateMatrix(int n) {
+		int[][] board = new int[n][n];
+		int maxLayers = n/2;
+		int layerNum = 0 ; 
+		int startCount = 1;
+		while(layerNum < maxLayers){
+			for (int j = layerNum; j < board[0].length - layerNum; j++) {
+				board[layerNum][j] = startCount++;
+			}
+			for (int i = layerNum + 1; i < board.length - layerNum -1 ; i++) {
+				board[i][board.length - layerNum -1] = startCount++;
+			}
+			for (int j = board[0].length - layerNum -1; j >= layerNum; j--) {
+				board[board.length - layerNum - 1][j] = startCount++;
+			}
+			for (int i = board.length - layerNum - 2; i > layerNum; i--) {
+				board[i][layerNum] = startCount++;
+			}
+			layerNum++;
+		}
+		if(board.length%2!=0){
+			board[layerNum][layerNum]  = startCount;
+		}
+        return board;
+    }
+/**
+*Given an array nums, write a function to move all 0's to the end of it while maintaining the relative order of the non-zero elements.
+*
+* For example, given nums = [0, 1, 0, 3, 12], after calling your function, nums should be [1, 3, 12, 0, 0].
+* 
+* Note:
+* You must do this in-place without making a copy of the array.
+* Minimize the total number of operations.
+* https://leetcode.com/problems/move-zeroes/
+*/
+	public void moveZeroes(int[] nums) {
+       int zeroIndex = getNextZero(nums, 0);
+       int i = zeroIndex + 1 ;
+       if(zeroIndex != -1){
+           while(i < nums.length && zeroIndex < nums.length){
+               if(nums[i] == 0){
+                   int nextNonZeroIndex = getNextNonZero(nums, i+1);
+                   if(nextNonZeroIndex != -1){
+                       swap(nums, zeroIndex, nextNonZeroIndex);
+                       zeroIndex++;
+                       i = nextNonZeroIndex +1;
+                   }else{
+                       break;
+                   }
+               }else{
+                   swap(nums, zeroIndex, i);
+                   zeroIndex++;
+                   i = i + 1 ;
+               }
+           }
+       }
+   }
+   private int getNextZero(int[] nums, int start){
+       int result = -1; 
+       while(start < nums.length){
+           if(nums[start] == 0 ){
+               result = start;
+               break;
+           }
+           start++;
+       }
+       return result;
+   }
+   private int getNextNonZero(int[] nums, int start){
+       int result = -1; 
+       while(start < nums.length){
+           if(nums[start] != 0 ){
+               result = start;
+               break;
+           }
+           start++;
+       }
+       return result;
+   }
+    
+    private void swap(int[] nums, int from, int to){
+        int temp  = nums[from];
+        nums[from] = nums[to];
+        nums[to] = temp;
+    }
+/**
+*Given an array with n objects colored red, white or blue, sort them so that objects of the same color are adjacent, with the colors in the order red, white and blue.
+*
+* Here, we will use the integers 0, 1, and 2 to represent the color red, white, and blue respectively.
+* 
+* Note:
+* You are not suppose to use the library's sort function for this problem.
+* 
+* Follow up:
+* A rather straight forward solution is a two-pass algorithm using counting sort.
+* First, iterate the array counting number of 0's, 1's, and 2's, then overwrite array with total number of 0's, then 1's and followed by 2's.
+* 
+* Could you come up with an one-pass algorithm using only constant space?
+*
+* https://leetcode.com/problems/sort-colors/
+*/
+	public void sortColors(int[] nums) {
+		// this method uses 3 way QuiclSort partitioning algorithm used in QuickSort
+        int start = 0 ;
+        int pivot = 0;
+        int end = nums.length -1;
+        while(start <= end){
+            if(nums[start] == 0){
+                swap(nums, start++, pivot++);
+            }else if(nums[start] == 2){
+                swap(nums,start,end--);
+            }else{
+                start++;
+            }
+        }
+    }
+/**
+* Find the kth largest element in an unsorted array. Note that it is the kth largest element in the sorted order, not the kth distinct element.
+* For example,
+* Given [3,2,1,5,6,4] and k = 2, return 5.
+* 
+* You may assume k is always valid, 1 ≤ k ≤ array's length.
+* https://leetcode.com/problems/kth-largest-element-in-an-array/
+*
+*/
+	// method 1 using heap 
+	public int findKthLargest(int[] nums,int k){
+        int result = -1;
+        int heapLength = nums.length - 1;
+        maxHeapify(nums, heapLength);
+        for(int i = 1 ; i < k ; i++){
+            deleteMax(nums,heapLength--);
+        }
+        result = nums[0];
+        return result;
+    }
+    private void deleteMax(int[] nums,int heapSize){
+        swap(nums, 0, heapSize);
+        sink(nums, 0, heapSize -1);
+    }
+    
+    private void maxHeapify(int[] nums, int heapLength){
+        for (int i = heapLength/2 ; i >= 0 / 2; i--) {
+            sink(nums, i, heapLength);
+        }
+    }
+    private void sink(int[] nums, int from, int upto){
+        int parent = from;
+        int child = getLeft(parent);
+        while(child <= upto){
+            if(child + 1 <= upto && nums[child + 1] > nums[child]){
+                child++;
+            }
+            if(nums[parent] < nums[child]){
+                swap(nums,parent,child);
+            }else{
+                break;
+            }
+            parent = child;
+            child = getLeft(parent);
+        }
+    }
+     private void swap(int[] array, int from, int to) {
+        int temp = array[from];
+        array[from] = array[to];
+        array[to] = temp;
+    }
+    private int getParent(int child) {
+        return (child - 1) / 2;
+    }
+
+    private int getLeft(int parent) {
+        return 2 * parent + 1;
+    }
+
+    private int getRight(int parent) {
+        return 2 * parent + 2;
+    }
+	// method 2 using quick sort partition 
+	public int findKthLargest(int[] nums, int k) {
+        int hi = nums.length - 1;
+        k--;
+        int lo = 0;
+        int result = nums[lo];
+        while (lo < hi) {
+            int j = partition(nums, lo, hi);
+            if (j > k) {
+                hi = j - 1;
+            } else if (j < k) {
+                lo = j + 1;
+            } else {
+                result = nums[j];
+                break;
+            }
+            result = nums[lo];
+        }
+        return result;
+    }
+
+    public int partition(int[] nums, int lo, int hi) {
+        int i = lo;
+        int j = hi + 1;
+        int partitionItem = nums[lo];
+        while (true) {
+            while (nums[++i] > partitionItem)
+                if (i == hi)
+                    break;
+            while (partitionItem > nums[--j])
+                if (j == lo)
+                    break;
+            if (i >= j)
+                break;
+            swap(nums, i, j);
+        }
+        swap(nums, lo, j);
+        return j;
+    }
+/**
+* Given an array nums containing n + 1 integers where each integer is between 1 and n (inclusive), prove that at least one duplicate number must exist. Assume that there is only one duplicate number, find the duplicate one.
+* Note:
+* You must not modify the array (assume the array is read only).
+* You must use only constant, O(1) extra space.
+* Your runtime complexity should be less than O(n2).
+* There is only one duplicate number in the array, but it could be repeated more than once.
+* https://leetcode.com/problems/find-the-duplicate-number/
+* https://leetcode.com/discuss/92307/easy-nlogn-java-solution-using-sorting-and-binary-search
+*/
+	public int findDuplicate(int[] nums) {
+        Arrays.sort(nums);
+        int lo = 0 ; 
+        int high = nums.length - 1 ;
+        int mid = -1;
+        while(lo < high){
+            mid = lo + (high - lo)/2 ;
+            if(mid > 0 && nums[mid] == nums[mid -1]){
+                return nums[mid];
+            }else if(mid + 1 < nums.length && nums[mid] == nums[mid + 1]){
+                 return nums[mid];
+            }else if(nums[mid] >= mid + 1){
+                lo = mid + 1;
+            }else{
+                high = mid - 1;
+            }
+        }
+        return 0;
     }
 /**
 * Implement an iterator over a binary search tree (BST). Your iterator will be initialized with the root node of a BST.
