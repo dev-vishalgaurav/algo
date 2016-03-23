@@ -597,6 +597,22 @@ public class Solution {
     }
 /**
 * Leet code missing number problem. 
+* Given an array containing n distinct numbers taken from 0, 1, 2, ..., n, find the one that is missing from the array.
+* For example,
+* Given nums = [0, 1, 3] return 2.
+* https://leetcode.com/problems/missing-number/
+* Note : This silution has time complexity of O(n) 
+*/	
+	public int missingNumber(int[] nums) {
+        long totalSum = (nums.length * (nums.length + 1)) / 2 ;
+        long actualSum = 0 ;
+        for(int i = 0 ; i < nums.length ; i ++){
+                actualSum += nums[i];
+        }
+        return (int)(totalSum - actualSum);
+    }
+/**
+* Leet code single number problem. 
 * Given an array of integers, every element appears twice except for one. Find that single one.
 * https://leetcode.com/problems/single-number/
 * Note : This solution has time complexity of O(n) 
@@ -1571,6 +1587,25 @@ public class Solution {
 			getInOrderTraversal(rootNode.right, list);
 		}
 	}
+	// using stack
+	public List<TreeNode> getInOrderTraversal(TreeNode root){
+        List<TreeNode> inorderList = new ArrayList<>();
+        Stack<TreeNode> stack = new Stack<>();
+        TreeNode head = root;
+        do{
+            while(head!=null){
+                stack.push(head);
+                head = head.left;
+            }
+            if(!stack.isEmpty()){
+                head = stack.pop();
+            }
+            inorderList.add(head);
+            head = head.right;
+        }
+        while(head!= null || !stack.isEmpty());
+        return inorderList;
+    }
 /**
 * Given a binary tree, return the inorder traversal of its nodes' values.
 * https://leetcode.com/problems/binary-tree-inorder-traversal/
@@ -3188,6 +3223,47 @@ public class Solution {
         swap(nums, lo, j);
         return j;
     }
+	// using quick sort 3 way partitioning
+	public int findKthLargest(int[] nums, int k) {
+        int hi = nums.length - 1;
+        k--;
+        int lo = 0;
+        int result = nums[lo];
+        int partition[] = new int[2];
+        while (lo <= hi) {
+            partition(nums, lo, hi,partition);
+            int loRange = partition[0];
+            int hiRange = partition[1];
+            if(k >= loRange && k <= hiRange){
+                result = nums[loRange];
+                break;
+            }else if(k < loRange){
+                hi = loRange - 1;
+            }else{
+                lo = hiRange + 1;
+            }
+            result = nums[lo];
+        }
+        return result;
+    }
+
+    public void partition(int[] nums, int lo, int hi,int[] result) {
+        
+        int lt = lo;
+        int gt = hi;
+        int i = lo;
+        while(i <= gt){
+            if(nums[i] > nums[lt]){
+                swap(nums,i++,lt++);
+            }else if(nums[i] < nums[lt]){
+                swap(nums,i,gt--);
+            }else{
+                i++;
+            }
+        }
+        result[0] = lt;
+        result[1] = gt;
+    }
 /**
 * Given an array nums containing n + 1 integers where each integer is between 1 and n (inclusive), prove that at least one duplicate number must exist. Assume that there is only one duplicate number, find the duplicate one.
 * Note:
@@ -3217,6 +3293,233 @@ public class Solution {
         }
         return 0;
     }
+/**
+* Given an integer, write a function to determine if it is a power of two.
+* https://leetcode.com/problems/power-of-two/
+*/
+	public boolean isPowerOfTwo(int n) {
+        return n > 0 && (n & (n-1)) == 0;  
+    }
+/**
+* Reverse bits of a given 32 bits unsigned integer.
+* For example, given input 43261596 (represented in binary as 00000010100101000001111010011100), return 964176192 (represented in binary as 00111001011110000010100101000000).
+* https://leetcode.com/problems/reverse-bits/
+*/
+	public int reverseBits(int n) {
+        for(int i = 0 ; i < 16; i++ ){
+            int from = 31-i;
+            int to = i ;
+            int right = n >> to & 1;
+            int left = n >> from & 1;
+            if(left != right){
+                n = n ^ (1<<from | 1 << to);
+            }
+        }
+        return n;
+    }
+/**
+* Given an array of size n, find the majority element. The majority element is the element that appears more than ⌊ n/2 ⌋ times.
+* You may assume that the array is non-empty and the majority element always exist in the array.
+* https://leetcode.com/problems/majority-element/
+*/	
+	// using majority vote method
+	// http://www.cs.utexas.edu/~moore/best-ideas/mjrty/
+	// http://www.programcreek.com/2014/02/leetcode-majority-element-java/
+	public int majorityElement(int[] nums) {
+        int count = 1 ;
+        int result = nums[0];
+        for(int i = 1 ; i < nums.length; i++){
+            if(count == 0){
+                result = nums[i];
+                count++;
+            }else if(nums[i] == result){
+                count++;
+            }else{
+                count--;
+            }
+        }
+        return result;
+    }
+	public int majorityElement(int[] nums) {
+        int lo = 0 ;
+        int hi = nums.length - 1;
+        int[] result = new int[2];
+        while(lo <= hi){
+            partition(nums,lo,hi,result);
+            if( result[1] - result[0] >= nums.length/2){
+                return nums[result[0]];
+            }else if(result[0] - 0 > nums.length / 2){
+                hi = result[0] - 1 ;
+            }else{
+                lo = result[1] + 1;
+            }
+        }
+        return nums[0] ;
+    }
+	// partition in decreasing order
+    public void partition(int[] nums, int lo, int hi,int[] result) {
+        int lt = lo;
+        int gt = hi;
+        int i = lo;
+        while(i <= gt){
+            if(nums[i] > nums[lt]){
+                swap(nums,i++,lt++);
+            }else if(nums[i] < nums[lt]){
+                swap(nums,i,gt--);
+            }else{
+                i++;
+            }
+        }
+        result[0] = lt;
+        result[1] = gt;
+    }
+/**
+* Given two 1d vectors, implement an iterator to return their elements alternately.
+* For example, given two 1d vectors:
+* 
+* v1 = [1, 2]
+* v2 = [3, 4, 5, 6]
+* By calling next repeatedly until hasNext returns false, the order of elements returned by next should be: [1, 3, 2, 4, 5, 6].
+* 
+* Follow up: What if you are given k 1d vectors? How well can your code be extended to such cases?
+* 
+* Clarification for the follow up question - Update (2015-09-18):
+* The "Zigzag" order is not clearly defined and is ambiguous for k > 2 cases. If "Zigzag" does not look right to you, replace "Zigzag" with "Cyclic". For example, given the following input:
+* 
+* [1,2,3]
+* [4,5,6,7]
+* [8,9]
+* It should return [1,4,8,2,5,9,3,6,7].
+* https://leetcode.com/problems/zigzag-iterator/
+* 
+*/
+	public class ZigzagIterator {
+   
+		int columnSize;
+		int totalCount;
+		int currentCount;
+		boolean isV1 ;
+		int currentColumn;
+		List<Integer> v1 ;
+		List<Integer> v2 ;
+				
+		public ZigzagIterator(List<Integer> v1, List<Integer> v2) {
+			this.v1 = v1;
+			this.v2 = v2;
+			totalCount = v1.size() + v2.size();
+			columnSize = Math.max(v1.size(),v2.size());
+			currentCount = 0 ;
+			isV1 = true ;
+			
+		}
+
+		public int next() {
+			int result = Integer.MIN_VALUE;
+			if(currentColumn < v1.size() && currentColumn < v2.size()){
+				if(isV1){
+					 result = v1.get(currentColumn) ;
+				}else{
+					result = v2.get(currentColumn);
+					currentColumn++;
+				}
+				isV1 = !isV1;
+			}else if(currentColumn < v2.size()){
+				result = v2.get(currentColumn);
+				currentColumn++ ;
+			}else{
+				result = v1.get(currentColumn);
+				currentColumn++ ;
+			}
+			currentCount++;
+			return result;
+		}
+
+		public boolean hasNext() {
+			return currentCount < totalCount;
+		}
+	}
+/**
+* Implement an iterator to flatten a 2d vector.
+* For example,
+* Given 2d vector =
+* 
+* [
+*  [1,2],
+*  [3],
+*  [4,5,6]
+* ]
+* By calling next repeatedly until hasNext returns false, the order of elements returned by next should be: [1,2,3,4,5,6].
+* https://leetcode.com/problems/flatten-2d-vector/
+*/
+	public class Vector2D {
+		private List<List<Integer>> vec2d ;
+		private int currentList;
+		private int currentListItem;
+		public Vector2D(List<List<Integer>> vec2d) {
+			this.vec2d = vec2d;
+			currentList = getNextValidList(0);
+			currentListItem = 0 ;
+		}
+		
+		private int getNextValidList(int startFrom){
+			int result = startFrom;
+			while(result < vec2d.size() && vec2d.get(result).size() == 0){
+				result++;
+			}
+			return result;
+		}
+		
+		public int next() {
+			int result = vec2d.get(currentList).get(currentListItem++);
+			if(currentListItem == vec2d.get(currentList).size() ){
+				currentListItem = 0 ;
+				currentList++;
+				currentList = getNextValidList(currentList) ;
+			}
+			return result;
+		}
+
+		public boolean hasNext() {
+		   return currentList < vec2d.size() &&  currentListItem < vec2d.get(currentList).size();
+		}
+	}
+/**
+* 
+* Given an Iterator class interface with methods: next() and hasNext(), design and implement a PeekingIterator that support the peek() operation -- it essentially peek() at the element that will be returned by the next call * * to next().
+* Here is an example. Assume that the iterator is initialized to the beginning of the list: [1, 2, 3].
+* Call next() gets you 1, the first element in the list.
+* Now you call peek() and it returns 2, the next element. Calling next() after that still return 2.
+* You call next() the final time and it returns 3, the last element. Calling hasNext() after that should return false.
+* https://leetcode.com/problems/peeking-iterator/
+*/
+	class PeekingIterator implements Iterator<Integer> {
+		private Iterator<Integer> iterator = null;
+		private Integer nextElement ;
+		public PeekingIterator(Iterator<Integer> iterator) {
+			// initialize any member here.
+			this.iterator = iterator;
+			nextElement = (iterator.hasNext()) ? iterator.next() : null ;
+		}
+
+		// Returns the next element in the iteration without advancing the iterator.
+		public Integer peek() {
+			return nextElement;
+		}
+
+		// hasNext() and next() should behave the same as in the Iterator interface.
+		// Override them if needed.
+		@Override
+		public Integer next() {
+			Integer result = nextElement ;
+			nextElement = (iterator.hasNext()) ? iterator.next() : null ;
+			return result;
+		}
+
+		@Override
+		public boolean hasNext() {
+			return nextElement != null;
+		}
+	}	
 /**
 * Implement an iterator over a binary search tree (BST). Your iterator will be initialized with the root node of a BST.
 * Calling next() will return the next smallest number in the BST.
