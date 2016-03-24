@@ -3317,6 +3317,16 @@ public class Solution {
         }
         return n;
     }
+    public int reverseBits(int n) {
+        int result = 0 ;
+        int onesPlace = 1;
+        for(int i = 0 ; i < 32; i++ ){
+            int num = n & onesPlace;
+            result = (num == 0) ? result * 2 : (result * 2) + 1 ;
+            onesPlace <<= 1;
+        }
+        return result;
+    }
 /**
 * Given an array of size n, find the majority element. The majority element is the element that appears more than ⌊ n/2 ⌋ times.
 * You may assume that the array is non-empty and the majority element always exist in the array.
@@ -3372,6 +3382,22 @@ public class Solution {
         }
         result[0] = lt;
         result[1] = gt;
+    }
+/**
+* Reverse digits of an integer.
+*
+* Example1: x = 123, return 321
+* Example2: x = -123, return -321
+* https://leetcode.com/problems/reverse-integer/
+*/
+	public int reverse(int x) {
+        int rev = 0;
+        while(x != 0){
+            if((rev*10)/10 != rev) return 0;
+            rev = rev*10 + x%10;
+            x = x/10;
+        }
+        return rev;
     }
 /**
 * Given two 1d vectors, implement an iterator to return their elements alternately.
