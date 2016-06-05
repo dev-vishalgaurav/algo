@@ -3246,7 +3246,7 @@ public class Solution {
         }
         return result;
     }
-
+	// improved partition which takes equal items into consideration.
     public void partition(int[] nums, int lo, int hi,int[] result) {
         
         int lt = lo;
@@ -3398,6 +3398,23 @@ public class Solution {
             x = x/10;
         }
         return rev;
+    }
+/**
+* 
+*/
+	public int rob(TreeNode root) {
+        int[] result = robUtils(root);
+        return Math.max(result[0],result[1]);
+    }
+    public int[] robUtils(TreeNode root){
+        int[] result = new int[2]; // default vlaue of each element is 0
+        if( root != null ){
+            int[] resultLeft = robUtils(root.left);
+            int[] resultRight = robUtils(root.right);
+            result[1] = Math.max(resultLeft[0],resultLeft[1]) + Math.max(resultRight[0],resultRight[1]);
+            result[0] = root.val + resultLeft[1] + resultRight[1];
+        }
+        return result;
     }
 /**
 * Given two 1d vectors, implement an iterator to return their elements alternately.
