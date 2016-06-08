@@ -1,0 +1,46 @@
+Given two integers,  and , find the maximal value of  xor , where  and  satisfy the following condition:
+
+
+Input Format
+
+The input contains two lines;  is present in the first line and  in the second line.
+
+Constraints 
+3
+
+Output Format
+
+The maximal value as mentioned in the problem statement.
+
+Sample Input
+
+10
+15
+Sample Output
+
+7
+Explanation
+
+The input tells us that  and . All the pairs which comply to above condition are the following: 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Here two pairs (10, 13) and (11, 12) have maximum xor value 7, and this is the answer.
