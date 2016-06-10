@@ -31,4 +31,18 @@ public class Solution {
             }
         return dpTable[dpTable.length - 1][dpTable[0].length -1];
     }
+	
+	public long getWays(int[] coins, int amount) {
+        long[][] amounts = new long[coins.length][amount+1];
+        for(int denom = 1 ; denom <= amount ; denom++)
+            for(int i = 0 ; i < coins.length ; i++){
+                long currentVal = (i > 0) ? amounts[i-1][denom] : 0;
+                if(coins[i] == denom) 
+					currentVal++;
+                if(coins[i] < denom) 
+					currentVal +=  amounts[i][denom - coins[i]];
+                amounts[i][denom] = currentVal;
+            }
+        return amounts[coins.length -1][amount];
+    }
 }
