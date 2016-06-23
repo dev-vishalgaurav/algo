@@ -1,5 +1,6 @@
 /**
  * https://leetcode.com/problems/design-hit-counter/
+ * This solution is not scalable for large number of hits in a second. Working on the scalable solution. 
  */
 public class HitCounter {
     private int limit = 300;
