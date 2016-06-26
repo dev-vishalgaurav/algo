@@ -8,13 +8,15 @@ public class Solution {
     private int GCD(int a, int b) { 
         return b==0 ? a : GCD(b, a%b);  
     }
-	private int GCD_L(int a, int b){
-		while (b > 0)
-		{
-			int temp = b;
-			b = a % b; // % is remainder
-			a = temp;
-		}
-		return a;
+    /**
+     * GCD with loop
+     */
+    private int GCD_L(int a, int b){
+	while (b > 0){
+	    int temp = b;
+	    b = a % b;
+	    a = temp;
 	}
+	return a;
+    }
 }
