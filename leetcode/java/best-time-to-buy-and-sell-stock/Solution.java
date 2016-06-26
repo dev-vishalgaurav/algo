@@ -1,5 +1,5 @@
 /**
- * Solution to Leetcode problem best time to buy and sell stock using Divide and Conquer technique
+ * Solution for Leetcode problem best time to buy and sell stock using Divide and Conquer technique
  * https://leetcode.com/problems/best-time-to-buy-and-sell-stock/
  */
 public class Solution {
