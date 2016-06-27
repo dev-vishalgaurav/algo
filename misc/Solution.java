@@ -147,4 +147,45 @@ public class Solution {
         }
         return result;
     }
+	
+	/**
+	 * implemented sort a stack using recursion 
+	 * http://www.geeksforgeeks.org/sort-a-stack-using-recursion/
+	 */
+	public static void sortStack(Stack<Integer> s){
+        if(!s.isEmpty()){
+            Integer temp = s.pop();
+            sortStack(s);
+            insertAtSorted(s, temp);
+        }
+    }
+    private static void insertAtSorted(Stack<Integer> s, Integer num){
+        if(s.isEmpty() || s.peek() < num){
+            s.push(num);
+        }else{
+            Integer temp = s.pop();
+            insertAtSorted(s, temp);
+            s.push(temp);
+        }
+    }
+	/**
+	 * implemented reverse a stack using recursion
+	 * details :- http://www.geeksforgeeks.org/reverse-a-stack-using-recursion/
+	 */
+    public static void reverseStack(Stack<Integer> s){
+        if(!s.isEmpty()){
+            Integer temp = s.pop();
+            reverseStack(s);
+            insertAtBottom(s, temp);
+        }
+    }
+    private static void insertAtBottom(Stack<Integer> s, Integer num){
+        if(s.isEmpty())
+             s.push(num);
+        else{
+            Integer temp = s.pop();
+            insertAtBottom(s, num);
+            s.push(temp);
+        }
+    }
 }
