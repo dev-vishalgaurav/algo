@@ -1,4 +1,13 @@
 /**
+ *
+ * Definition for singly-linked list.
+ *
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ *
  * https://leetcode.com/problems/odd-even-linked-list/
  */
 public class Solution {
