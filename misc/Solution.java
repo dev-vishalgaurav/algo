@@ -188,4 +188,36 @@ public class Solution {
             s.push(temp);
         }
     }
+	
+	/**
+     * Backtracking practice. Solving Rat in Maze problem from below mentioned link.
+     * http://www.geeksforgeeks.org/backttracking-set-2-rat-in-a-maze/
+     * @param maze 
+     * @return
+     */
+    public static boolean solveRatInAMaze(int[][] maze,int[][] solution, int x, int y){
+        if(maze.length == 0 || maze[0].length == 0) return false;
+        boolean result = false;
+        if(x >= 0 && x < maze[0].length && y >= 0 && y < maze.length && maze[x][y] == 1){
+            solution[x][y] = 1;
+            if (x == maze.length - 1 && y == maze[0].length -1) 
+                return true;
+            if(solveRatInAMaze(maze, solution, x + 1, y))
+                return true;
+            if(solveRatInAMaze(maze, solution, x, y + 1))
+                return true;
+            solution[x][y] = 0; // back tracking
+        }
+        return result;
+    }
+    private static void testRatInMaze(){
+        int maze[][] = {{1, 0, 0, 0},{1, 1, 1, 1},{0, 0, 0, 1},{1, 1, 1, 1}};
+        int[][] solution = new int[maze.length][maze[0].length];
+        if(solveRatInAMaze(maze, solution, 0, 0)){
+            printMatrix(solution);
+        }else{
+            System.out.println(false);
+            printMatrix(solution); // this should be all zero
+        }
+    }
 }
