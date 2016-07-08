@@ -7,7 +7,6 @@ public class Solution {
         int count[] = new int[256];
         for(int i = 0 ; i < s.length() ; i++){
             char c = s.charAt(i);
-            int index = 
             count[c]++;
             odds = (count[c] % 2 == 0 ) ? odds -1 : odds + 1;
         }
