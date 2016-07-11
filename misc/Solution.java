@@ -262,4 +262,29 @@ public class Solution {
             map.put(c, count);
         }
     }
+	/**
+     * http://www.geeksforgeeks.org/merge-two-sorted-arrays-o1-extra-space/
+     * merge 2 sorted array in O(1) space using insertion sort technique so that first array has smaller part and second array has larger part.
+     * max(first) <= min(second)
+     * Input: ar1[] = {1, 5, 9, 10, 15, 20};
+     * ar2[] = {2, 3, 8, 13};
+     * Output: ar1[] = {1, 2, 3, 5, 8, 9}
+     *  ar2[] = {10, 13, 15, 20}  
+     * @param first
+     * @param second
+     */
+    public void mergeSortedArray(int[] first, int[] second){
+        for(int i = second.length - 1 ; i >=0 ; i--){
+            int last = first[first.length - 1];
+            int j = 0;
+            for(j = first.length - 1 ; j >=0 && first[j] > second[i] ; j--){
+                if(j != first.length - 1)
+                    first[j+1] = first[j];
+            }
+            if(j != first.length -1){
+                first[j+1] = second[i];
+                second[i] = last;
+            }
+        }
+    }
 }
