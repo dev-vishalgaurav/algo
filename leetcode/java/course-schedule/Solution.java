@@ -19,7 +19,7 @@ public class Solution {
         if(status[n] == 1) return false;
         status[n] = 1;
         for(Integer next : graph.get(n))
-            if(!DFS(next,graph,status)) return false;
+            if(status[next]!= 2 && !DFS(next,graph,status)) return false;
         status[n] = 2;
         return true;
     }
