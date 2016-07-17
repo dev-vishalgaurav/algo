@@ -60,4 +60,17 @@ public class Solution {
 			return 1;
 		return 0;
 	}
+	/**
+	* Using diff arrays for start and end times.
+	*/
+	public boolean canAttendMeetings(Interval[] intervals) {
+        int n = intervals.length;
+        int[] start = new int[n], end = new int[n];
+        for(int i = 0 ; i < n ; start[i] = intervals[i].start, end[i] = intervals[i].end, i++);
+        Arrays.sort(start);
+        Arrays.sort(end);
+        for(int i = 1 ; i < n ; i++)
+            if(start[i] < end[i-1]) return false;
+        return true;
+    }
 }
