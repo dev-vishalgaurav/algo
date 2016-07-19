@@ -220,8 +220,73 @@ public class Solution {
             printMatrix(solution); // this should be all zero
         }
     }
-
-    /**
+	/**
+	 * Get permutations pf a string in sorted/lexicographic order.
+     * https://www.youtube.com/watch?v=nYFd7VHKyWQ
+     */
+    public List<String> getAllPermutationsSorted(String input) {
+        List<String> result = new ArrayList<>();
+        char[] word = input.toCharArray();
+        Map<Character,Integer> map = new TreeMap<>();
+        addToCharMap(map, word);
+        char[] letters = new char[map.size()];
+        int[] counts = new int[map.size()];
+        int i = 0 ;
+        for(Entry<Character,Integer> entry : map.entrySet()){
+            letters[i] = entry.getKey();
+            counts[i] = entry.getValue();
+            i++;
+        }
+        permuteL(0,word,letters,counts,result);
+        return result;
+    }
+    private void permuteL(int level, char[] word, char[] letters, int[] counts, List<String> result) {
+        if(level == word.length){
+            result.add(new String(word));
+            return;
+        }
+        for(int i = 0; i < letters.length; i++){
+            if(counts[i] > 0){
+                word[level] = letters[i];
+                counts[i]--;
+                permuteL(level + 1, word,letters,counts,result);
+                counts[i]++;
+            }
+        }
+    }
+    private void addToCharMap(Map<Character,Integer> map, char[] word){
+        for(int i = 0 ; i < word.length ; i++){
+            char c = word[i];
+            int count = map.containsKey(c) ? map.get(c) + 1 : 1 ;
+            map.put(c, count);
+        }
+    }
+	/**
+     * http://www.geeksforgeeks.org/merge-two-sorted-arrays-o1-extra-space/
+     * merge 2 sorted array in O(1) space using insertion sort technique so that first array has smaller part and second array has larger part.
+     * max(first) <= min(second)
+     * Input: ar1[] = {1, 5, 9, 10, 15, 20};
+     * ar2[] = {2, 3, 8, 13};
+     * Output: ar1[] = {1, 2, 3, 5, 8, 9}
+     *  ar2[] = {10, 13, 15, 20}  
+     * @param first
+     * @param second
+     */
+    public void mergeSortedArray(int[] first, int[] second){
+        for(int i = second.length - 1 ; i >=0 ; i--){
+            int last = first[first.length - 1];
+            int j = 0;
+            for(j = first.length - 1 ; j >=0 && first[j] > second[i] ; j--){
+                if(j != first.length - 1)
+                    first[j+1] = first[j];
+            }
+            if(j != first.length -1){
+                first[j+1] = second[i];
+                second[i] = last;
+            }
+        }
+    }
+        /**
      * values in nums will range from 1 - n
      */
     public static void countFrequency(int[] nums){
@@ -249,5 +314,5 @@ public class Solution {
     private static void testCountFrequency(){
         int nums[] = {1,2,3,4,5,6,7,8,9,10,11,12};
         countFrequency(nums);
-    }
+    }   
 }
