@@ -1,6 +1,6 @@
 /**
 * This will contain solutions for the questions which doesn't find place at any of the directories in algo. Solutions are not checked on any OJ. So it may
-miss some test cases or corner cases.
+* iss some test cases or corner cases.
 */
 public class Solution {
 /**
@@ -219,5 +219,35 @@ public class Solution {
             System.out.println(false);
             printMatrix(solution); // this should be all zero
         }
+    }
+
+    /**
+     * values in nums will range from 1 - n
+     */
+    public static void countFrequency(int[] nums){
+        
+        int i = 0 ; 
+        while( i < nums.length){
+            if(nums[i] <= 0){
+                i++;
+                continue;
+            }
+            if(nums[nums[i] - 1] > 0){
+                nums[i] = nums[nums[i] - 1];
+                nums[nums[i] - 1] = -1;
+                // i will not be incremented here.  
+            }else{
+                nums[nums[i] - 1]--;
+                nums[i] = 0;
+                i++;
+            }
+        }
+        for(int j = 0 ; j < nums.length ; j++ ){
+            System.out.println(j+1 + " -> " + -nums[j]);
+        }
+    }
+    private static void testCountFrequency(){
+        int nums[] = {1,2,3,4,5,6,7,8,9,10,11,12};
+        countFrequency(nums);
     }
 }
