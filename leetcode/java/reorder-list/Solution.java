@@ -21,7 +21,7 @@ public class Solution {
             center = center.next;
             slow.next = pre;
         }
-        if(fast.next == null){ // is list is of odd length then move next in first half and store the last value.
+        if(fast.next == null){ // if list is of odd length then move next in first half and store the last value.
             mid = slow;
             slow = slow.next;
             mid.next = null;
