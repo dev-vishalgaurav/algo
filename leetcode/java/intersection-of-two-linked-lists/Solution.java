@@ -22,6 +22,7 @@ public class Solution {
         }
         return a;
     }
+	
     public ListNode getIntersectionNode(ListNode a, ListNode b) {
 	    if(a == null || b == null) return null;
 	    int lenA = 0 ,lenB = 0, diff = 0;
