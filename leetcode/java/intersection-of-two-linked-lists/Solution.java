@@ -11,6 +11,17 @@
  * https://leetcode.com/problems/intersection-of-two-linked-lists/
  */
 public class Solution {
+	/**
+	 * super concise version https://leetcode.com/articles/intersection-two-linked-lists/
+	 */
+	public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+        ListNode a = headA, b = headB;
+        while(a != b){
+            a = (a == null) ? headB : a.next;
+            b = (b == null) ? headA : b.next;
+        }
+        return a;
+    }
     public ListNode getIntersectionNode(ListNode a, ListNode b) {
 	    if(a == null || b == null) return null;
 	    int lenA = 0 ,lenB = 0, diff = 0;
