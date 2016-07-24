@@ -2,6 +2,9 @@
  * https://leetcode.com/problems/game-of-life/
  */
 public class Solution {
+	/**
+	 * O(mn) time and O(1) space
+	 */
     public void gameOfLife(int[][] board) {
         if(board == null || board.length == 0 || board[0].length == 0) return;
         int m = board.length, n = board[0].length;
