@@ -11,4 +11,13 @@ public class Solution {
         }
         return start + 1;
     }
+	public int lengthOfLastWord(String a) {
+        if(a == null || a.isEmpty()) return 0;
+        int streak = 0, len = a.length(), result = 0 ;
+        for(int i =  0 ; i < len ; i++){
+            streak = a.charAt(i) == ' ' ? 0 : streak + 1;
+            result = streak > 0 ? streak : result;
+        }
+        return result;
+    }
 }
