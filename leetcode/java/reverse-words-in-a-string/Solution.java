@@ -18,4 +18,14 @@ public class Solution {
         }
         return sb.toString();
     }
-}
+	public String reverseWords(String s) {
+        String[] result = s.trim().split(" ");
+        StringBuilder sb = new StringBuilder();
+        for(int i = result.length - 1 ; i >=0 ; i--){
+            if(!result[i].isEmpty()){
+             sb.append(result[i]);
+             sb.append(i == 0  ? "" :" " );
+            }
+        }
+        return sb.toString();
+    }
