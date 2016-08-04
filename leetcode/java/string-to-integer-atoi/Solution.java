@@ -2,7 +2,25 @@
  * https://leetcode.com/problems/string-to-integer-atoi/
  */
 public class Solution {
-	
+	public int myAtoi(String a) {
+        if(a == null || a.isEmpty()) return 0;
+        int i = 0, j = a.length() - 1;
+        while(i < j && a.charAt(i) == ' ') i++; // trim spaces in front
+        while(j >= i && a.charAt(j) == ' ') j--; // trin spaces from back
+        if(i > j) return 0; // no valid chars
+		// check the first char for ngeative or positive chars else default is false;
+        boolean isNve = (a.charAt(i) == '-' || a.charAt(i) == '+') ? a.charAt(i++) == '-' ? true : false : false;
+        long num = 0;
+        while(i <= j && a.charAt(i)!= '.'){
+            char c = a.charAt(i++);
+            if(c >= '0' && c <= '9'){
+                num = num * 10 + c - '0';
+                if(isNve && num >= Math.abs((long)Integer.MIN_VALUE)) return Integer.MIN_VALUE;
+                else if(!isNve && num >= Integer.MAX_VALUE) return Integer.MAX_VALUE;
+            }else break; // invalid string found return the num 
+        }
+        return (int)(num == 0 ? num : (isNve) ? -num : num) ;
+    }
     public int myAtoi(String str) {
         str = str.trim();
         if(str.isEmpty()) return 0;
