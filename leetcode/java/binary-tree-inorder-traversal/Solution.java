@@ -6,29 +6,10 @@
  *     TreeNode right;
  *     TreeNode(int x) { val = x; }
  * }
- * https://leetcode.com/problems/binary-tree-preorder-traversal/
+ * https://leetcode.com/problems/binary-tree-inorder-traversal/
  */
 public class Solution {
-	/**
-	 * O(n) space
-	 */
-    public List<Integer> preorderTraversal(TreeNode root) {
-        List<Integer> result = new ArrayList<>();
-        if(root == null) return result;
-        Stack<TreeNode> stack = new Stack<>();
-        stack.push(root);
-        while(!stack.isEmpty()){
-            TreeNode parent = stack.pop();
-            result.add(parent.val);
-            if(parent.right!=null) stack.push(parent.right);
-            if(parent.left!=null) stack.push(parent.left);
-        }
-        return result;
-    }
-	/**
-	 * O(1) Space using Morris traversal
-	 */
-	public List<Integer> preorderTraversal(TreeNode root) {
+    public List<Integer> inorderTraversal(TreeNode root) {
         List<Integer> result = new ArrayList<>();
         TreeNode cur = root;
         while(cur != null){
@@ -37,12 +18,13 @@ public class Solution {
                 cur = cur.right;
             }else{
                 TreeNode rightMost = cur.left;
+				// connect the rightMost child of left node with current node
                 while(rightMost.right != null && rightMost.right != cur) rightMost = rightMost.right;
                 if(rightMost.right == cur){
                     rightMost.right = null;
+                    result.add(cur.val);
                     cur = cur.right;
                 }else{
-                    result.add(cur.val);
                     rightMost.right = cur;
                     cur = cur.left;
                 }
